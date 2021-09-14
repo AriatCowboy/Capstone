@@ -24,27 +24,28 @@ Short
    - goes up - stock price $12
      - My initial $10 decrease to $8
 
-
+   
+# Needs to be edited
 # UML
 ## Models
 ### Game
     - int gameId
     - int userId
-    - int yearNumber - round number (10 rounds per game)
+    - int lastYear - round number (10 rounds per game)
     - int currentMarketId
 ### User
-    - int UserId
-    - String Username 
+    - int userId
+    - String username 
     - String password
-      - Spring Security LMS
+- Spring Security LMS
 ### Company
     - int companyId
     - String Name
     - int companyTypeId
-    - int StockPrice
+    - int defaultStockPrice
     - String risk
         (Stock)
-    - int StockTotal - total stocks available (start at 100)
+    - int stockTotal - total stocks available (start at 100)
     - int dividend - a value a user gets per stock, per comapny, per ye
 ### Market
     - int companyId
@@ -53,11 +54,11 @@ Short
     - int MarketId
     - int gameId
     - int StockPurchased
-    - Boolean long - position (short or long)
+    - Boolean isLongInvestment - position (short or long)
 ### MarketType
     - int roll - 1-20 random
-    - int BullModify
-    - int BearModify
+    - int bullModify
+    - int bearModify
     - int companyId
 ### Leaderboard
     - String username
@@ -76,11 +77,11 @@ Short
     String findCompanyTypeById (int companyTypeId)
 
 ### GameRepository
+[comment]: <> (Table needs UserId, CurrentMarket, yearNumber)
     Game findGameByUserID (int userId)
     Boolean addGameState (Game game)
     Boolean updateGameState (Game game)
     Boolean deleteGameState (int gameId)
-[comment]: <> (Table needs UserId, CurrentMarket, yearNumber)
 
 ### UserRepository
     User FindByUserName (String Username)
@@ -114,13 +115,13 @@ Short
     String findCompanyTypeById (int companyTypeId)
 
 ### GameService
+[comment]: <> (Table needs UserId, yearNumber)
     Game findGameByUserID (int UserId)
     Boolean addGameState (Game game)
     Boolean updateGameState (Game game)
     Boolean deleteGameState (int userId)
-        - Boolean Verify (Game game)
-[comment]: <> (Table needs UserId, yearNumber)
 [comment]: <> (Everything above needs to be filled ei String username, Market market, int yearNumber)
+        - Boolean Verify (Game game)
 
 ### UserService
     User findByUserName (String Username)
@@ -160,6 +161,7 @@ Short
     String findCompanyTypeById (companyTypeId)
 
 ### GameController
+[comment]: <> (Table needs UserId, PortfolioId, Market, MarketType, yearNumber)
     @GETMAPPING
     Game findGameByUserID (UserId)
     @POSTMAPPING
@@ -168,7 +170,6 @@ Short
     Boolean updateGameState (Game game)
     @PUTMAPPING
     Boolean quitGame (Game game)
-[comment]: <> (Table needs UserId, PortfolioId, Market, MarketType, yearNumber)
 
 ### UserController
     @GETMAPPING
