@@ -76,11 +76,11 @@ Short
     String findCompanyTypeById (int companyTypeId)
 
 ### GameRepository
-[comment]: <> (Table needs UserId, CurrentMarket, yearNumber)
     Game findGameByUserID (int userId)
     Boolean addGameState (Game game)
     Boolean updateGameState (Game game)
     Boolean deleteGameState (int gameId)
+[comment]: <> (Table needs UserId, CurrentMarket, yearNumber)
 
 ### UserRepository
     User FindByUserName (String Username)
