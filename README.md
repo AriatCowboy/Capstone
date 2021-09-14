@@ -4,7 +4,6 @@
  - User can learn more in the information page:
    - How to play
    - View company profiles
-   - Adjust settings
    - View the current leaderboard
  
 Long 
@@ -25,17 +24,14 @@ Short
    - goes up - stock price $12
      - My initial $10 decrease to $8
 
-
-
+   
 # Needs to be edited
 # UML
 ## Models
 ### Game
     - int gameId
     - int userId
-    - int portfolioId
-    - int yearNumber
-    - int yearlyScenarioId
+    - int yearNumber - round number (10 rounds per game)
     - int currentMarketId
 ### User
     - int UserId
@@ -45,154 +41,110 @@ Short
 ### Company
     - int companyId
     - String Name
-    - String companyType
+    - int companyTypeId
     - int StockPrice
     - String risk
         (Stock)
-    - int totalStocksAvailable
-    - int currentPrice 
-    - int dividend
-    - bet Boolean (???? here ????)
-      - shift(?)
-### Portfolio
-    - int portfolioId
-    - int userId
+    - int StockTotal - total stocks available (start at 100)
+    - int dividend - a value a user gets per stock, per comapny, per ye
+### Market
     - int companyId
-    - int stockCount
-
-### yearlyScenario
-    - int yearlyScenarioId
-    - int companyTypeId
-    - String name
-    - boolean bullOrBear
-
-### CurrentMarket
-    - int userId
-    - int marketId
-    - List<Company> companies
-    - boolean isBull(bear) 
-    - String marketType
-
-### BearMarket
-    - int bullMarketId
-    - int rollResult
-    - int modifier
+    - int Price - stock price, starts at 50
+    - int YearNumber
+    - int MarketId
+    - int gameId
+    - int StockPurchased
+    - Boolean long - position (short or long)
+### MarketType
+    - int roll - 1-20 random
+    - int BullModify
+    - int BearModify
     - int companyId
-
-### BullMarket
-    - int bearMarketId
-    - int rollResult
-    - int modifier
-    - int companyId
+### Leaderboard
+    - String username
+    - int score
 
 ## Repository
-### bullMarketRepository
-    BullMarket findById (companyId)
-
-### bearMarketRepository
-    BearMarket findById (companyId)
+### MarketTypeRepository
+     int findRoll (int roll, int companyId, Boolean isBull)
 
 ### CompanyRepository
     List<Company> findAll()
     Company findById (int companyId)
-    int readCompanyPriceById(int companyId)
-    updateCurrentStockPrice (companyId)
+    int findCompanyPriceById(int companyId)
 
 ### CompanyTypeRepository   
-    String findCompanyTypeById (companyTypeId)
+    String findCompanyTypeById (int companyTypeId)
 
 ### GameRepository
-[comment]: <> (Table needs UserId, PortfolioId, Market, MarketType, yearNumber)
-    Game findGameByUserID (UserId)
+[comment]: <> (Table needs UserId, CurrentMarket, yearNumber)
+    Game findGameByUserID (int userId)
     Boolean addGameState (Game game)
+    Boolean updateGameState (Game game)
+    Boolean deleteGameState (int gameId)
 
 ### UserRepository
     User FindByUserName (String Username)
-    boolean addUser (String username)
-    boolean deleteUser (userId)
+    Boolean addUser (String username)
+    Boolean deleteUser (userId)
 
 ### LeaderboardRepository
-    List<User> findAll()
-    addHighScore(int UserId, int Score)
-
-### PortfolioRepository
-    Portfolio findPortfolioByUserId(userId)
-    boolean updatePortfolio(Portfolio)
-    boolean addPortfolio(Portfolio)
-    boolean deletePortfolio(Portfolio)
+    List<LeaderBoard> findAll()
+    Boolean addHighScore(String username, int score)
 
 ### MarketRepository   
-    List<Company> findAll()
-    Company findById (int companyId)
-    int findCompanyPriceById(int companyId)
+    List<Market> findByGameId(int gameId)
+    List<Market> findPortfolio(int gameId, int yearNumber)
+    List<Market> findByCompanyId (int companyId, int gameId)
     boolean addMarket (Market market)
-    boolean updateCurrentStockPrice (int companyId)
-    boolean setBankrupt(boolean) - handle checking removal of a comapny in the market?
-    boolean deleteMarket (userId) - remove company for bankruptcy
-    boolean addCompany (int companyId) - adds if less than 10 companies in market
-
-### yearlyScenario
-    YearlyScenario findById(yearlyScenarioID)
+    boolean setBankrupt(boolean bankrupt, int gameId) - handle checking removal of a comapny in the market?
+    boolean deleteMarket (int gameId) - remove company for bankruptcy
+    boolean addCompany (int companyId, int gameId) - adds if less than 10 companies in market
 
 ## Service
 
-### bullMarketService
-    BullMarket findById (companyId)
-
-### bearMarketService
-    BearMarket findById (companyId)
+### MarketTypeService
+     int findRoll (int roll, int companyId, Boolean isBull)
 
 ### CompanyService
     List<Company> findAll()
     Company findById (int companyId)
     int readCompanyPriceById(int companyId)
-    updateCurrentStockPrice (companyId)
-
-    updateStockPri
 
 ### CompanyTypeService
-    String findCompanyTypeById (companyTypeId)
+    String findCompanyTypeById (int companyTypeId)
 
 ### GameService
-[comment]: <> (Table needs UserId, PortfolioId, Market, MarketType, yearNumber)
+[comment]: <> (Table needs UserId, yearNumber)
     Game findGameByUserID (int UserId)
     Boolean addGameState (Game game)
+    Boolean updateGameState (Game game)
     Boolean deleteGameState (int userId)
-[comment]: <> (Everything above needs to be filled ei String username, Market market, int yearnumber, YearlyScenario yearlyScenario)
+[comment]: <> (Everything above needs to be filled ei String username, Market market, int yearNumber)
         - Boolean Verify (Game game)
 
 ### UserService
-    User FindByUserName (String Username)
-    boolean addUser (String username, HashedPassword)
-    boolean deleteUser (int userId)
+    User findByUserName (String Username)
+    Boolean addUser (String username, HashedPassword)
+    Boolean deleteUser (int userId)
 
 ### LeaderboardService
-    List<User> findAll()
-    addHighScore(int UserId, int Score)
-
-### PortfolioService
-    Portfolio findPortfolioByUserId(userId)
-    boolean addPortfolio(Portfolio portfolio)
-    boolean deletePortfolio(int userId)
+    List<Leaderboard> findAll()
+    Boolean addHighScore(String username, int Score)
 
 ### MarketService
-    List<Company> findAll()
-    Company findById (int companyId)
-    int findCompanyPriceById(int companyId)
-    boolean addMarket (Market market)
-    boolean updateCurrentStockPrice (int companyId)
-    boolean setBankrupt(boolean) - handle checking removal of a comapny in the market?
-    boolean deleteMarket (userId) - remove company for bankruptcy
-    boolean addCompany (int companyId) - adds if less than 10 companies in market
+    List<Market> findByGameId(int gameId)
+    List<Market> findPortfolio(int gameId, int yearNumber)
+    List<Market> findByCompanyId (int companyId, int gameId)
+    Boolean addMarket (Market market)
+    Boolean setBankrupt(boolean bankrupt) - handle checking removal of a comapny in the market?
+    Boolean deleteMarket (userId) - remove company for bankruptcy
+    Boolean addCompany (int companyId) - adds if less than 10 companies in market
 
 ## Controller
-### bullMarketController
+### MarketTypeController
     @GETMAPPING
-    BullMarket findById(comapnyId)
-
-### bearMarketController
-    @GETMAPPING
-    BearMarket findById(companyId)
+    int findRoll()
 
 ### CompanyController
     @GETMAPPING
@@ -203,8 +155,6 @@ Short
     int readCompanyPriceById (int companyId)
     @GETMAPPING
     int findStockAvailable (int companyId)
-    @PUTMAPPING
-    updateStockAvailableByCompany (int companyId)
 
 ### CompanyTypeController
     @GETMAPPING
@@ -216,40 +166,46 @@ Short
     Game findGameByUserID (UserId)
     @POSTMAPPING
     Boolean addGameState (Game game)
+    @PUTMAPPING
+    Boolean updateGameState (Game game)
+    @PUTMAPPING
+    Boolean quitGame (Game game)
 
 ### UserController
     @GETMAPPING
-    User FindByUserName (String Username)
+    User findByUserName (String Username)
     @POSTMAPPING
-    boolean addUser (String username, HashedPassword)
+    Boolean addUser (String username, HashedPassword)
     @DELETEMAPPING
-    boolean deleteUser (userId)
+    Boolean deleteUser (userId)
 
 ### LeaderboardController
     @GETMAPPING
-    List<User> findAll()
+    List<Leaderboard> findAll()
     @POSTMAPPING
-    addHighScore(int UserId, int Score)
-
-### PortfolioController
-    @GETMAPPING
-    Portfolio findPortfolioByUserId(userId)
-    @POSTMAPPING
-    boolean addPortfolio(Portfolio)
+    Boolean addHighScore(String username, int score)
 
 ### MarketController
     @GETMAPPING
-    List<Company> findAll()
+    List<Market> findAll(int gameId)
     @GETMAPPING
-    Company findById (int companyId)
-    GETMAPPING
-    int readCompanyPriceById(int companyId) -IDK maybe Stockprice
+    Market findByGameId (int gameId)
+    @GETMAPPING
+    List<Market> findPortfolio (int yearNumber, int GameId)
+    @GETMAPPING
+    List<Market>findByCompanyId (int companyId, int gameId) 
+    @POSTMAPPING
+    boolean addMarket (Market market)
     @PUTMAPPING
-    boolean updateCurrentStockPrice (companyId)
-    @PUTMAPPING
-    boolean setBankrupt(boolean)
+    boolean setBankrupt(boolean bankrupt)
+    @DELETEMAPPING
+    boolean deleteMarket (userId)
+    @POSTMAPPING
+    boolean addCompany (int companyId)
 
 ### Play
+- Button audio toggle
+
  - createPortfolio
    - Input Companies, stock #/ company
    - Cancel() - Link to playMenu
@@ -261,10 +217,6 @@ Short
 
  - View
    - Return Table of Companies
-
-### settings
- - Screen Res
- - audio toggle
 
 ### Information
  - ViewLeaderboard
@@ -290,4 +242,3 @@ Short
 
 # Database Schema
      - See ERD diagram
-     - Audit log
