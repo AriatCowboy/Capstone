@@ -24,8 +24,7 @@ Short
    - goes up - stock price $12
      - My initial $10 decrease to $8
 
-   
-# Needs to be edited
+
 # UML
 ## Models
 ### Game
