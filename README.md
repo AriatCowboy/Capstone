@@ -205,16 +205,16 @@ Short
 ### Play
 - Button audio toggle
 
- - createPortfolio
+#### createPortfolio
     - Input Companies, stock #/ company
     - Cancel() - Link to playMenu
     - Output Portfolio Object
 
- - playMenu
+#### playMenu
     - View ("Input" Game.Portfolio.companies) "Output" Display Portfolio
     - View ("Input" Game.Market.companies) "Output" Display Market
 
- - View
+#### View
     - Return Table of Companies
 
 ### Information
