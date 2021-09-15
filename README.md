@@ -1,6 +1,3 @@
-# Capstone
-CapstoneProject
-
 # User Stories
  - User can play the game and register score 
  - User can quit the game at anytime
@@ -27,8 +24,7 @@ Short
    - goes up - stock price $12
      - My initial $10 decrease to $8
 
-   
-# Needs to be edited
+
 # UML
 ## Models
 ### Game
@@ -80,11 +76,11 @@ Short
     String findCompanyTypeById (int companyTypeId)
 
 ### GameRepository
-[comment]: <> (Table needs UserId, CurrentMarket, yearNumber)
     Game findGameByUserID (int userId)
     Boolean addGameState (Game game)
     Boolean updateGameState (Game game)
     Boolean deleteGameState (int gameId)
+[comment]: <> (Table needs UserId, CurrentMarket, yearNumber)
 
 ### UserRepository
     User FindByUserName (String Username)
@@ -118,13 +114,13 @@ Short
     String findCompanyTypeById (int companyTypeId)
 
 ### GameService
-[comment]: <> (Table needs UserId, yearNumber)
     Game findGameByUserID (int UserId)
     Boolean addGameState (Game game)
     Boolean updateGameState (Game game)
     Boolean deleteGameState (int userId)
-[comment]: <> (Everything above needs to be filled ei String username, Market market, int yearNumber)
         - Boolean Verify (Game game)
+[comment]: <> (Table needs UserId, yearNumber)
+[comment]: <> (Everything above needs to be filled ei String username, Market market, int yearNumber)
 
 ### UserService
     User findByUserName (String Username)
@@ -164,7 +160,6 @@ Short
     String findCompanyTypeById (companyTypeId)
 
 ### GameController
-[comment]: <> (Table needs UserId, PortfolioId, Market, MarketType, yearNumber)
     @GETMAPPING
     Game findGameByUserID (UserId)
     @POSTMAPPING
@@ -173,6 +168,7 @@ Short
     Boolean updateGameState (Game game)
     @PUTMAPPING
     Boolean quitGame (Game game)
+[comment]: <> (Table needs UserId, PortfolioId, Market, MarketType, yearNumber)
 
 ### UserController
     @GETMAPPING
