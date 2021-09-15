@@ -6,9 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 
@@ -21,7 +18,6 @@ public class GameJDBCRepository implements GameRepository{
     }
 
     @Override
-    @Transactional
     public Game findGameByUserID (int userId){
         final String sql = "select game_id, user_id, year_number "
                 + "from game "
@@ -33,7 +29,6 @@ public class GameJDBCRepository implements GameRepository{
     }
 
     @Override
-    @Transactional
     public Game addGame (Game game){
         final String sql = "insert into game (user_id, year_number) "
                 + " values (?,?);";
@@ -53,6 +48,8 @@ public class GameJDBCRepository implements GameRepository{
         game.setGameId(keyHolder.getKey().intValue());
         return game;
     }
+
+    @Override
     public Boolean updateGameState (Game game){
         final String sql = "update game set "
                 + "year_number = ? "
@@ -62,6 +59,8 @@ public class GameJDBCRepository implements GameRepository{
                 game.getLastYear(),
                 game.getUserId()) > 0;
     }
+
+    @Override
     public Boolean deleteGame (int gameId){
         return jdbcTemplate.update("delete from game where game_id = ?;", gameId) > 0;
     }
