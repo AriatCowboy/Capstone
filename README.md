@@ -206,22 +206,22 @@ Short
 - Button audio toggle
 
  - createPortfolio
-   - Input Companies, stock #/ company
-   - Cancel() - Link to playMenu
-   - Output Portfolio Object
+    - Input Companies, stock #/ company
+    - Cancel() - Link to playMenu
+    - Output Portfolio Object
 
  - playMenu
-   - View ("Input" Game.Portfolio.companies) "Output" Display Portfolio
-   - View ("Input" Game.Market.companies) "Output" Display Market
+    - View ("Input" Game.Portfolio.companies) "Output" Display Portfolio
+    - View ("Input" Game.Market.companies) "Output" Display Market
 
  - View
-   - Return Table of Companies
+    - Return Table of Companies
 
 ### Information
- - ViewLeaderboard
- - ViewTutorial
- - ViewCompanies
- - Bug Report 
+    - ViewLeaderboard
+    - ViewTutorial
+    - ViewCompanies
+    - Bug Report 
 
 ### ViewLeaderboard
     - Table Ranks
