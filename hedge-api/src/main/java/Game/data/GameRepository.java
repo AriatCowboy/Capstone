@@ -4,7 +4,7 @@ import Game.model.Game;
 
 public interface GameRepository {
     Game findGameByUserID (int userId);
-    Boolean addGameState (Game game);
+    Game addGame (Game game);
     Boolean updateGameState (Game game);
-    Boolean deleteGameState (int gameId);
+    Boolean deleteGame (int gameId);
 }
