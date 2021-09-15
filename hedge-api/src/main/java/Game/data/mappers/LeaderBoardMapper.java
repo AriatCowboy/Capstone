@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LeaderBoardMapper implements RowMapper<LeaderBoard> {
-
     @Override
     public LeaderBoard mapRow(ResultSet resultSet, int i) throws SQLException {
         LeaderBoard leaderboard = new LeaderBoard();

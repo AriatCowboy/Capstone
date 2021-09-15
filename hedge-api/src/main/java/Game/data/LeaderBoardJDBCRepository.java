@@ -16,12 +16,12 @@ public class LeaderBoardJDBCRepository implements LeaderBoardRepository{
     public LeaderBoardJDBCRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-    @Override
+
     public List<LeaderBoard> findAll(){
         final String sql = "select * from leaderboard ORDER BY score DESC limit 10;";
         return jdbcTemplate.query(sql, new LeaderBoardMapper());
     }
-    @Override
+
     public Boolean addHighScore(String username, int score){
 
         final String sql = "insert into leaderboard (user_name, score) values (?,?);";

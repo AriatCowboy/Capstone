@@ -3,7 +3,7 @@ package Game.model;
 public class Company {
     int companyId;
     String name;
-    int companyTypeId;
+    String companyTypeName;
     int defaultStockPrice;
     String risk;
     int stockTotal;
@@ -12,10 +12,10 @@ public class Company {
     public Company() {
     }
 
-    public Company(int companyId, String name, int companyTypeId, int defaultStockPrice, String risk, int stockTotal, int dividend) {
+    public Company(int companyId, String name, String companyTypeName, int defaultStockPrice, String risk, int stockTotal, int dividend) {
         this.companyId = companyId;
         this.name = name;
-        this.companyTypeId = companyTypeId;
+        this.companyTypeName = companyTypeName;
         this.defaultStockPrice = defaultStockPrice;
         this.risk = risk;
         this.stockTotal = stockTotal;
@@ -38,12 +38,12 @@ public class Company {
         this.name = name;
     }
 
-    public int getCompanyTypeId() {
-        return companyTypeId;
+    public String getCompanyTypeName() {
+        return companyTypeName;
     }
 
-    public void setCompanyTypeId(int companyTypeId) {
-        this.companyTypeId = companyTypeId;
+    public void setCompanyTypeName(String companyTypeName) {
+        this.companyTypeName = companyTypeName;
     }
 
     public int getDefaultStockPrice() {
