@@ -43,7 +43,25 @@ public class MarketService {
     }
 
     public Result<Market> addMarket (Market market) {
+        Result<Market> result = new Result<>();
 
+        if (market.getMarketId() != 0) {
+            result.addMessage("marketId cannot be set for `add` operation", ResultType.INVALID);
+            return result;
+        }
+
+        result = validateMarket(market);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        if(!repository.addMarket(market)) {
+            result.addMessage("There was in internal error.", ResultType.INVALID);
+            return result;
+        }
+
+        result.setPayload(market);
+        return result;
     }
 
     private Result<Market> validateMarket(Market market) {
