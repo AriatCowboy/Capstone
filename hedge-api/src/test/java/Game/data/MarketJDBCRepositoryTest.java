@@ -26,37 +26,22 @@ class MarketJDBCRepositoryTest {
     }
 
     @Test
-    void shouldFindByGameId() {
+    void findByGameId() {
         assertEquals(2, repository.findByGameId(1).size());
     }
 
     @Test
-    void shouldNotFindByGameId() {
-        assertEquals(0, repository.findByGameId(6).size());
-    }
-
-    @Test
-    void shouldFindPortfolio() {
+    void findPortfolio() {
         assertEquals(2, repository.findPortfolio(1, 1).size());
     }
 
     @Test
-    void shouldNotFindPortfolio() {
-        assertEquals(0, repository.findPortfolio(1, 7).size());
-    }
-
-    @Test
-    void shouldFindByCompanyId() {
+    void findByCompanyId() {
         assertEquals(1, repository.findByCompanyId(1, 1).size());
     }
 
     @Test
-    void shouldNotFindByCompanyId() {
-        assertEquals(0, repository.findByCompanyId(50, 1).size());
-    }
-
-    @Test
-    void shouldAddMarket() {
+    void addMarket() {
         Market market = new Market(3, 25, 1, 3, 1, 10, false, false);
         repository.addMarket(market);
         assertEquals(3, repository.findPortfolio(1, 1).size());
@@ -73,12 +58,7 @@ class MarketJDBCRepositoryTest {
     }
 
     @Test
-    void shouldDeleteMarket() {
+    void deleteMarket() {
         assertTrue(repository.deleteMarket(1));
-    }
-
-    @Test
-    void shouldNotDeleteMarket() {
-        assertFalse(repository.deleteMarket(5));
     }
 }
