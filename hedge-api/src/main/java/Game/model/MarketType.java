@@ -1,6 +1,7 @@
 package Game.model;
 
 public class MarketType {
+    int marketId;
     int roll;
     int bullModify;
     int bearModify;
@@ -9,7 +10,8 @@ public class MarketType {
     public MarketType() {
     }
 
-    public MarketType(int roll, int bullModify, int bearModify, int companyId) {
+    public MarketType(int marketId, int roll, int bullModify, int bearModify, int companyId) {
+        this.marketId = marketId;
         this.roll = roll;
         this.bullModify = bullModify;
         this.bearModify = bearModify;
@@ -46,5 +48,12 @@ public class MarketType {
 
     public void setCompanyId(int companyId) {
         this.companyId = companyId;
+    }
+
+    public int getMarketId() {
+        return marketId;
+    }
+    public void setMarketId(int marketId) {
+        this.marketId = marketId;
     }
 }

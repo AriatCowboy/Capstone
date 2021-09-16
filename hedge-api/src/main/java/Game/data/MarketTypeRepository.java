@@ -1,5 +1,7 @@
 package Game.data;
 
+import Game.model.MarketType;
+
 public interface MarketTypeRepository{
-    int findRoll (int roll, int companyId, Boolean isBull);
+    MarketType findRoll (int roll, int companyId);
 }

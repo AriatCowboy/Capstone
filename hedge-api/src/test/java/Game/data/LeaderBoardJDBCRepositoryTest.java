@@ -1,6 +1,5 @@
 package Game.data;
 
-import Game.model.Game;
 import Game.model.LeaderBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +36,4 @@ class LeaderBoardJDBCRepositoryTest {
 
         assertEquals(1, leaderBoardList.size());
     }
-
-
-
 }
