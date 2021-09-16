@@ -83,4 +83,5 @@ public class MarketJDBCRepository implements MarketRepository{
     public boolean deleteMarket (int gameId){
         return jdbcTemplate.update("delete from market where game_id = ?", gameId) > 0;
     }
+
 }
