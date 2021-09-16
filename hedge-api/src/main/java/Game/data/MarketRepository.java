@@ -11,5 +11,4 @@ public interface MarketRepository {
     boolean addMarket (Market market);
     boolean setBankrupt(Market market);
     boolean deleteMarket (int gameId);
-//    boolean addCompany (Market market);
 }
