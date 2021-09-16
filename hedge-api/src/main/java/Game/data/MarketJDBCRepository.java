@@ -36,6 +36,8 @@ public class MarketJDBCRepository implements MarketRepository{
         return new ArrayList<>(jdbcTemplate.query(sql, new MarketMapper(), gameId, companyId));
     }
 
+
+
     public boolean addMarket (Market market){
         final String sql = "insert into market (company_id, price, year_num, game_id, stock_purchased, `long`, `is_bankrupt`) values (?,?,?,?,?,?,?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();

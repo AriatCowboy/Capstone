@@ -2,20 +2,24 @@ package Game.domain;
 
 import Game.data.MarketRepository;
 import Game.model.Market;
+import Game.model.MarketType;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class MarketService {
 
     private final MarketRepository repository;
     private final GameService gameService;
+    private final MarketTypeService marketTypeService;
 
-    public MarketService(MarketRepository repository, GameService gameService) {
+    public MarketService(MarketRepository repository, GameService gameService, MarketTypeService marketTypeService) {
         this.repository = repository;
         this.gameService = gameService;
+        this.marketTypeService = marketTypeService;
     }
 
     public List<Market> findByGameId(int gameId) {
@@ -42,7 +46,48 @@ public class MarketService {
         return repository.findByCompanyId(companyId, gameId);
     }
 
+    public List<Market> generateThisYearMarket(int currentYear, int gameId) {
+        if (gameId <= 0 || currentYear <= 0) {
+            return new ArrayList<>();
+        }
+
+        List<Market> marketList = repository.findPortfolio(currentYear - 1, gameId);
+
+        int newlyBankruptCompanies = 0;
+
+        for (Market m : marketList) {
+            m.setYearNumber(m.getYearNumber() + 1);
+            m.setStockPurchased(0);
+
+            int roll = generateRandom(1, 20);
+
+            Result<MarketType> marketType = marketTypeService.findRoll(roll, m.getCompanyId());
+            int modifier = 0;
+            if (isBullMarket()) {
+                modifier = marketType.getPayload().getBullModify();
+            } else {
+                modifier = marketType.getPayload().getBearModify();
+            }
+
+            m.setPrice(m.getPrice() + modifier);
+
+            if (m.getPrice() <= 0 && !m.getBankrupt()) {
+                m.setPrice(0);
+                m.setBankrupt(true);
+                setBankrupt(m);
+                newlyBankruptCompanies++;
+            }
+        }
+
+        for(int i = 0; i < newlyBankruptCompanies; i++) {
+            marketList = addCompanyToMarket(marketList, currentYear, gameId);
+        }
+
+        return marketList;
+    }
+
     public Result<Market> addMarket (Market market) {
+
         Result<Market> result = new Result<>();
 
         if (market.getMarketId() != 0) {
@@ -62,6 +107,44 @@ public class MarketService {
 
         result.setPayload(market);
         return result;
+    }
+
+    public boolean setBankrupt(Market market) {
+        if (market.getCompanyId() <= 0 || market.getCompanyId() > 26 || market.getGameId() < 0) {
+            return false;
+        }
+
+        return repository.setBankrupt(market);
+    }
+
+    public boolean deleteMarket(int gameId) {
+        if (gameId <= 0) {
+            return false;
+        }
+
+        return repository.deleteMarket(gameId);
+    }
+
+    private List<Market> addCompanyToMarket(List<Market> marketList, int yearNum, int gameId) {
+        int rand = 0;
+
+        boolean keepGoing = true;
+        int instances = 0;
+        do {
+            rand = generateRandom(1, 26);
+            for (Market m : marketList) {
+                if (m.getCompanyId() == rand) {
+                    instances++;
+                }
+            }
+            if (instances == 0) {
+                Market newMarket = new Market(rand, 25, yearNum, 0, gameId, 0, false, false);
+                marketList.add(newMarket);
+                keepGoing = false;
+            }
+        } while (keepGoing);
+
+        return marketList;
     }
 
     private Result<Market> validateMarket(Market market) {
@@ -87,6 +170,11 @@ public class MarketService {
             return result;
         }
 
+        if (market.getPrice() < 0) {
+            result.addMessage("Cannot have negative price.", ResultType.INVALID);
+            return result;
+        }
+
         if (gameService.findGameById(market.getGameId()) == null) {
             result.addMessage("There is not a game with this ID.", ResultType.NOT_FOUND);
             return result;
@@ -94,8 +182,15 @@ public class MarketService {
 
         return result;
     }
-//    needs market type repo
-//    Make method for each math operation
-//
+
+    private int generateRandom(int min, int max) {
+        Random rand = new Random();
+
+        return rand.nextInt((max - min) + 1) + min;
+    }
+
+    private boolean isBullMarket() {
+        return (Math.random() < 0.5);
+    }
 
 }
