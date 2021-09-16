@@ -42,9 +42,9 @@ public class MarketService {
         return repository.findByCompanyId(companyId, gameId);
     }
 
-//    public Result<Market> addMarket (Market market) {
-//
-//    }
+    public Result<Market> addMarket (Market market) {
+
+    }
 
     private Result<Market> validateMarket(Market market) {
         Result<Market> result = new Result<>();
