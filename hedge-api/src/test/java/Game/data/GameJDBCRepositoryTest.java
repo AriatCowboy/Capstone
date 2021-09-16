@@ -15,6 +15,9 @@ class GameJDBCRepositoryTest {
     GameJDBCRepository repository;
 
     @Autowired
+    MarketJDBCRepository marketRepository;
+
+    @Autowired
     KnownGoodState knownGoodState;
 
     @BeforeEach
@@ -43,7 +46,7 @@ class GameJDBCRepositoryTest {
         Game game = makeGame();
         Game actual = repository.addGame(game);
         assertNotNull(actual);
-        assertEquals(3, actual.getGameId());
+        assertEquals(2, actual.getGameId());
     }
 
     @Test
@@ -65,7 +68,8 @@ class GameJDBCRepositoryTest {
 
     @Test
     void shouldDelete() {
-        assertTrue(repository.deleteGame(2));
+        assertTrue(marketRepository.deleteMarket(1));
+        assertTrue(repository.deleteGame(1));
     }
 
     @Test

@@ -8,11 +8,12 @@ public class Market {
     int gameId;
     int stockPurchased;
     Boolean isLongInvestment;
+    Boolean isBankrupt;
 
     public Market() {
     }
 
-    public Market(int companyId, int price, int yearNumber, int marketId, int gameId, int stockPurchased, Boolean isLongInvestment) {
+    public Market(int companyId, int price, int yearNumber, int marketId, int gameId, int stockPurchased, Boolean isLongInvestment, Boolean isBankrupt) {
         this.companyId = companyId;
         this.price = price;
         this.yearNumber = yearNumber;
@@ -20,6 +21,7 @@ public class Market {
         this.gameId = gameId;
         this.stockPurchased = stockPurchased;
         this.isLongInvestment = isLongInvestment;
+        this.isBankrupt = isBankrupt;
     }
 
     public int getCompanyId() {
@@ -76,5 +78,13 @@ public class Market {
 
     public void setLongInvestment(Boolean longInvestment) {
         this.isLongInvestment = longInvestment;
+    }
+
+    public Boolean getBankrupt() {
+        return isBankrupt;
+    }
+
+    public void setBankrupt(Boolean bankrupt) {
+        isBankrupt = bankrupt;
     }
 }
