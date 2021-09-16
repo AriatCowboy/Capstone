@@ -20,6 +20,17 @@ public class GameJDBCRepository implements GameRepository{
     }
 
     @Override
+    public Game findGameById (int gameId){
+        final String sql = "select game_id, user_id, year_number "
+                + "from game "
+                + "where game_id = ?;";
+
+        return jdbcTemplate.query(sql, new GameMapper(), gameId).stream()
+                .findFirst().orElse(null);
+
+    }
+
+    @Override
     public Game findGameByUserID (int userId){
         final String sql = "select game_id, user_id, year_number "
                 + "from game "
