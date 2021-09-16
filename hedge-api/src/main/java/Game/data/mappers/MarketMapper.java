@@ -18,6 +18,7 @@ public class MarketMapper implements RowMapper<Market> {
         market.setGameId(resultSet.getInt("game_id"));
         market.setStockPurchased(resultSet.getInt("stock_purchased"));
         market.setLongInvestment(resultSet.getBoolean("long"));
+        market.setBankrupt(resultSet.getBoolean("is_bankrupt"));
         return market;
     }
 }

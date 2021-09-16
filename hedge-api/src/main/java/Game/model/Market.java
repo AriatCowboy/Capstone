@@ -85,6 +85,6 @@ public class Market {
     }
 
     public void setBankrupt(Boolean bankrupt) {
-        isBankrupt = bankrupt;
+        this.isBankrupt = bankrupt;
     }
 }

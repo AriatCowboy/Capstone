@@ -29,4 +29,5 @@ class MarketTypeJDBCRepositoryTest {
         assertEquals(-4, marketType.getBullModify());
         assertEquals(62, marketType.getMarketId());
     }
+
 }

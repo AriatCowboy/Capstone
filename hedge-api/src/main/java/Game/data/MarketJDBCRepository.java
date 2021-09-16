@@ -37,17 +37,16 @@ public class MarketJDBCRepository implements MarketRepository{
     }
 
     public boolean addMarket (Market market){
-        final String sql = "insert into market (company_id, price, year_num, market_id, game_id, stock_purchased, `long`) values (?,?,?,?,?,?,?);";
+        final String sql = "insert into market (company_id, price, year_num, game_id, stock_purchased, `long`, `is_bankrupt`) values (?,?,?,?,?,?,?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, market.getCompanyId());
             ps.setInt(2, market.getPrice());
             ps.setInt(3, market.getYearNumber());
-            ps.setInt(4, market.getMarketId());
-            ps.setInt(5, market.getGameId());
-            ps.setInt(6, market.getStockPurchased());
-            ps.setBoolean(7, market.getLongInvestment());
+            ps.setInt(4, market.getGameId());
+            ps.setInt(5, market.getStockPurchased());
+            ps.setBoolean(6, market.getLongInvestment());
             ps.setBoolean(7, market.getBankrupt());
             return ps;
         }, keyHolder);
@@ -55,7 +54,7 @@ public class MarketJDBCRepository implements MarketRepository{
     }
 
     public boolean setBankrupt(Market market){
-        String sql = "Insert into market (company_id, price, year_num, market_id, game_id, stock_purchased, `long`, isBankrupt) values (?,?,?,?,?,?,?,?);";
+        String sql = "Insert into market (company_id, price, year_num, game_id, stock_purchased, `long`, is_bankrupt) values (?,?,?,?,?,?,?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected;
         final String finalSql = sql;
@@ -64,25 +63,18 @@ public class MarketJDBCRepository implements MarketRepository{
             ps.setInt(1, market.getCompanyId());
             ps.setInt(2, market.getPrice());
             ps.setInt(3, market.getYearNumber());
-            ps.setInt(4, market.getMarketId());
-            ps.setInt(5, market.getGameId());
-            ps.setInt(6, market.getStockPurchased());
-            ps.setBoolean(7, market.getLongInvestment());
+            ps.setInt(4, market.getGameId());
+            ps.setInt(5, market.getStockPurchased());
+            ps.setBoolean(6, market.getLongInvestment());
             ps.setBoolean(7, market.getBankrupt());
             return ps;
         }, keyHolder);
-        sql = "Update market set isBankrupt = true where game_id = ? and company_id = ?;";
+        sql = "Update market set is_bankrupt = true where game_id = ? and company_id = ?;";
         final String finalSql1 = sql;
         rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(finalSql1, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, market.getCompanyId());
-            ps.setInt(2, market.getPrice());
-            ps.setInt(3, market.getYearNumber());
-            ps.setInt(4, market.getMarketId());
-            ps.setInt(5, market.getGameId());
-            ps.setInt(6, market.getStockPurchased());
-            ps.setBoolean(7, market.getLongInvestment());
-            ps.setBoolean(7, market.getBankrupt());
+            ps.setInt(2, market.getGameId());
             return ps;
         }, keyHolder) + rowsAffected;
         return rowsAffected > 0;

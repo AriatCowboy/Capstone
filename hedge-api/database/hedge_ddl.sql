@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `hedge`.`market` (
   `game_id` INT NOT NULL,
   `stock_purchased` INT NOT NULL,
   `long` TINYINT NOT NULL,
-  `isBankrupt` TINYINT NOT NULL,
+  `is_bankrupt` TINYINT NOT NULL,
   INDEX `fk_company_id_idx` (`company_id` ASC) VISIBLE,
   PRIMARY KEY (`market_id`),
   INDEX `fk_game_id_idx` (`game_id` ASC) VISIBLE,
