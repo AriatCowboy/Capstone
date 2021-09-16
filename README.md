@@ -32,11 +32,6 @@ Short
     - int userId
     - int lastYear - round number (10 rounds per game)
     - int currentMarketId
-### User
-    - int userId
-    - String username 
-    - String password
-- Spring Security LMS
 ### Company
     - int companyId
     - String Name
@@ -54,7 +49,9 @@ Short
     - int gameId
     - int StockPurchased
     - Boolean isLongInvestment - position (short or long)
+    - Boolean isBankrupt
 ### MarketType
+    - int marketId;
     - int roll - 1-20 random
     - int bullModify
     - int bearModify
@@ -100,6 +97,9 @@ Short
     boolean deleteMarket (int gameId) - remove company for bankruptcy
     boolean addCompany (int companyId, int gameId) - adds if less than 10 companies in market
 
+### MarketTypeRepository
+    MarketType findRoll(int roll, int companyId)
+
 ## Service
 
 ### MarketTypeService
@@ -121,11 +121,6 @@ Short
         - Boolean Verify (Game game)
 [comment]: <> (Table needs UserId, yearNumber)
 [comment]: <> (Everything above needs to be filled ei String username, Market market, int yearNumber)
-
-### UserService
-    User findByUserName (String Username)
-    Boolean addUser (String username, HashedPassword)
-    Boolean deleteUser (int userId)
 
 ### LeaderboardService
     List<Leaderboard> findAll()
@@ -169,14 +164,6 @@ Short
     @PUTMAPPING
     Boolean quitGame (Game game)
 [comment]: <> (Table needs UserId, PortfolioId, Market, MarketType, yearNumber)
-
-### UserController
-    @GETMAPPING
-    User findByUserName (String Username)
-    @POSTMAPPING
-    Boolean addUser (String username, HashedPassword)
-    @DELETEMAPPING
-    Boolean deleteUser (userId)
 
 ### LeaderboardController
     @GETMAPPING
