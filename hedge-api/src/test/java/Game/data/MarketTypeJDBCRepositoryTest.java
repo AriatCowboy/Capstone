@@ -30,4 +30,11 @@ class MarketTypeJDBCRepositoryTest {
         assertEquals(62, marketType.getMarketId());
     }
 
+    @Test
+    void shouldNotFindOneMarketType(){
+        MarketType marketType= repository.findRoll(21, 4);
+
+        assertNull(marketType);
+    }
+
 }
