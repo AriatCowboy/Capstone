@@ -13,7 +13,7 @@ public class MarketTypeService {
     public Result<MarketType> findRoll(int roll, int companyId){
         Result<MarketType> result = new Result<>();
         if (roll > 0 && roll < 21){
-            if (companyId > 0 && companyId < 26) {
+            if (companyId > 0 && companyId < 27) {
                 MarketType marketType = repository.findRoll(roll, companyId);
                 result.setPayload(marketType);
             } else {

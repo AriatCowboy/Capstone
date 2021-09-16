@@ -24,4 +24,10 @@ class MarketTypeServiceTest {
         assertEquals(-5, result.getPayload().getBullModify());
         assertEquals(5, result.getPayload().getBearModify());
     }
+    @Test
+    void shouldNotFindRoll() {
+        Result<MarketType> result = service.findRoll(40, 3);
+        assertEquals(false, result.isSuccess());
+
+    }
 }

@@ -50,10 +50,4 @@ class CompanyJDBCRepositoryTest {
         company = repository.findById(28);
         assertNull(company);
     }
-
-    @Test
-    void shouldNotFindById() {
-        Company company = repository.findById(50);
-        assertNull(company);
-    }
 }
