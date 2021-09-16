@@ -52,7 +52,7 @@ public class GameService {
         return resultboolean;
     }
     public boolean deleteGame (int gameId){
-        boolean result = marketRepository.deletemarket(gameId);
+        boolean result = marketRepository.deleteMarket(gameId);
         if (result){
             return repository.deleteGame(gameId);
         } else {
