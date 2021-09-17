@@ -4,7 +4,8 @@ function Errors({ errors = [] }) {
   }
 
   return (
-    <div className="alert alert-danger">
+    <div class="ui message">
+      <h3>Errors...</h3>
       {errors.map((error) => (
         <li key={error}>{error}</li>
       ))}

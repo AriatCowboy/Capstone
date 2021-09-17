@@ -3,16 +3,17 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   Redirect,
 } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
 
+import AuthContext from "./AuthContext";
+
 import backDropVideo from "./components/videocomponents/backDropVideo.mp4";
 import HomeNavBar from "./components/hiddencomponents/HomeNavBar";
-import PlayGame from "./components/homecomponents/PlayGame";
+import Game from "./components/homecomponents/Game";
 import Info from "./components/homecomponents/Info";
 import Settings from "./components/homecomponents/Settings";
 import Login from "./components/homecomponents/Login";
@@ -28,59 +29,91 @@ function Home() {
 }
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  const login = (token) => {
+    const decodedTokenPayload = jwt_decode(token);
+
+    const roles = decodedTokenPayload.roles.split(",");
+
+    const user = {
+      id: decodedTokenPayload.id,
+      username: decodedTokenPayload.sub,
+      roles,
+      token,
+      hasRole(role) {
+        return this.roles.includes(role);
+      },
+    };
+
+    setUser(user);
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
+
+  const auth = {
+    user,
+    login,
+    logout,
+  };
+
   return (
     <>
-      <Router>
-        <div className="App">
-          <HomeNavBar />
+      <AuthContext.Provider value={auth}>
+        <Router>
+          <div className="App">
+            <HomeNavBar />
 
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
+            <Switch>
+              <Route exact path="/">
+                <Home />
+              </Route>
 
-            <Route path="/play_game">
-              <PlayGame />
-            </Route>
+              <Route path="/game">
+                {auth.user ? <Game /> : <Redirect to="/login" />}
+              </Route>
 
-            <Route exact path="/info">
-              <Info />
-            </Route>
+              <Route exact path="/info">
+                <Info />
+              </Route>
 
-            <Route path="/info/how_to_play">
-              <HowToPlay />
-            </Route>
+              <Route path="/info/how_to_play">
+                <HowToPlay />
+              </Route>
 
-            <Route path="/info/about">
-              <About />
-            </Route>
+              <Route path="/info/about">
+                <About />
+              </Route>
 
-            <Route path="/info/contact">
-              <Contact />
-            </Route>
+              <Route path="/info/contact">
+                <Contact />
+              </Route>
 
-            <Route path="/info/leaderboard">
-              <Leaderboard />
-            </Route>
+              <Route path="/info/leaderboard">
+                <Leaderboard />
+              </Route>
 
-            <Route path="/settings">
-              <Settings />
-            </Route>
+              <Route path="/settings">
+                <Settings />
+              </Route>
 
-            <Route path="/login">
-              <Login />
-            </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
 
-            <Route path="/register">
-              <Register />
-            </Route>
+              <Route path="/register">
+                <Register />
+              </Route>
 
-            <Route path="/not_found">
-              <NotFound />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
+              <Route path="/not_found">
+                <NotFound />
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+      </AuthContext.Provider>
 
       <video id="backdrop" autoPlay loop muted>
         <source src={backDropVideo} type="video/mp4" />

@@ -4,7 +4,7 @@ function Leaderboard() {
   return (
     <>
       <InfoNavbar />
-      <h1>Leaderboard</h1>
+      <h1 id="subheader">Leaderboard</h1>
     </>
   );
 }

@@ -34,8 +34,9 @@ export default function Login() {
       .then((response) => {
         if (response.status === 200) {
           return response.json();
+        } else if (response.status === 500) {
+          setErrors(["Database is currently down"]);
         } else if (response.status === 403) {
-          // the login failed
           setErrors(["Login failed."]);
         } else {
           setErrors(["Unknown error."]);
@@ -48,12 +49,12 @@ export default function Login() {
           history.push("/");
         }
       })
-      .catch((error) => console.log(error)); // send the user to a generic "error" page
+      .catch((error) => console.log(error));
   };
 
   return (
     <div class="ui form">
-      <Header as="h1">Login</Header>
+      <h1 id="header">Login</h1>
       <Errors errors={errors} />
       <form onSubmit={handleSubmit}>
         <div className="App">
@@ -72,9 +73,10 @@ export default function Login() {
           />
         </div>
         <div>
-          <button type="submit">Login</button>
+        <br />
+          <Button type="submit">Login</Button>
           <br />
-          <Link to="/register" color="yellow">
+          <Link id="account" to="/register">
             I don't have an account
           </Link>
         </div>

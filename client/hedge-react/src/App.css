@@ -1,5 +1,37 @@
+#account {
+  font-size: 15px;
+  color: yellow;
+}
+
+#subheader {
+  font-size: 55px;
+  font-style: italic;
+  color: yellow;
+}
+
+#header {
+  font-size: 85px;
+  font-style: italic;
+  color: yellow;
+}
+
+#subheader {
+  font-size: 55px;
+  font-style: italic;
+  color: yellow;
+}
+
+#logout {
+  position: relative;
+  height: 1px;
+  width: fit-content;
+  left: 1100px;
+  top: -35px;
+}
+
 #info-menu {
   margin: 10px;
+  font-size: larger;
   color: yellow;
 }
 

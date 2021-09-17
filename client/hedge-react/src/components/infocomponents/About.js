@@ -4,7 +4,7 @@ function About() {
   return (
     <>
       <InfoNavbar />
-      <h1>About</h1>
+      <h1 id="subheader">About</h1>
     </>
   );
 }
