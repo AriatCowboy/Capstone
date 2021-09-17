@@ -1,7 +1,7 @@
 package Game.model;
 
 public class Market {
-    int companyId;
+    Company company;
     int price;
     int yearNumber;
     int marketId;
@@ -13,8 +13,8 @@ public class Market {
     public Market() {
     }
 
-    public Market(int companyId, int price, int yearNumber, int marketId, int gameId, int stockPurchased, Boolean isLongInvestment, Boolean isBankrupt) {
-        this.companyId = companyId;
+    public Market(Company company, int price, int yearNumber, int marketId, int gameId, int stockPurchased, Boolean isLongInvestment, Boolean isBankrupt) {
+        this.company = company;
         this.price = price;
         this.yearNumber = yearNumber;
         this.marketId = marketId;
@@ -24,12 +24,12 @@ public class Market {
         this.isBankrupt = isBankrupt;
     }
 
-    public int getCompanyId() {
-        return companyId;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCompanyId(int companyId) {
-        this.companyId = companyId;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public int getPrice() {
@@ -77,7 +77,7 @@ public class Market {
     }
 
     public void setLongInvestment(Boolean longInvestment) {
-        this.isLongInvestment = longInvestment;
+        isLongInvestment = longInvestment;
     }
 
     public Boolean getBankrupt() {
@@ -85,6 +85,7 @@ public class Market {
     }
 
     public void setBankrupt(Boolean bankrupt) {
-        this.isBankrupt = bankrupt;
+        isBankrupt = bankrupt;
     }
+
 }
