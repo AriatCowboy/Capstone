@@ -34,6 +34,8 @@ export default function Login() {
       .then((response) => {
         if (response.status === 200) {
           return response.json();
+        } else if (response.status === 500) {
+          setErrors(["Database is currently down"]);
         } else if (response.status === 403) {
           setErrors(["Login failed."]);
         } else {
