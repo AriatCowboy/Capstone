@@ -5,14 +5,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/game")
-public class GameController {
+@RequestMapping("/api/gameend")
+public class GameEndController {
 
     private final GameService service;
 
-    public GameController(GameService service) {
+    public GameEndController(GameService service) {
         this.service = service;
     }
-
-
 }
