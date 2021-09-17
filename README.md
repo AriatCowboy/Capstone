@@ -1,4 +1,3 @@
-<<<<<<< BKluge
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -300,4 +299,3 @@ Short
 
 # Database Schema
      - See ERD diagram
->>>>>>> main
