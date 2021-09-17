@@ -15,11 +15,29 @@ class GameJDBCRepositoryTest {
     GameJDBCRepository repository;
 
     @Autowired
+    MarketJDBCRepository marketRepository;
+
+    @Autowired
     KnownGoodState knownGoodState;
 
     @BeforeEach
     void setup() {
         knownGoodState.set();
+    }
+
+    @Test
+    void shouldFindByGameId() {
+        Game game1 = repository.findGameById(1);
+
+        assertNotNull(game1);
+        assertEquals(1, game1.getGameId());
+    }
+
+    @Test
+    void shouldNotFindGameById() {
+        Game game1 = repository.findGameById(5);
+
+        assertNull(game1);
     }
 
     @Test
@@ -43,7 +61,7 @@ class GameJDBCRepositoryTest {
         Game game = makeGame();
         Game actual = repository.addGame(game);
         assertNotNull(actual);
-        assertEquals(3, actual.getGameId());
+        assertEquals(2, actual.getGameId());
     }
 
     @Test
@@ -65,7 +83,8 @@ class GameJDBCRepositoryTest {
 
     @Test
     void shouldDelete() {
-        assertTrue(repository.deleteGame(2));
+        assertTrue(marketRepository.deleteMarket(1));
+        assertTrue(repository.deleteGame(1));
     }
 
     @Test

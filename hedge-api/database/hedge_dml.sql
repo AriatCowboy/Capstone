@@ -601,8 +601,8 @@ begin
 	INSERT INTO `hedge`.`game` (`user_id`, `year_number`) VALUES ('1', '1');
    
 	-- Create market
-	INSERT INTO `hedge`.`market` (`company_id`, `price`, `year_num`, `game_id`, `stock_purchased`, `long`) VALUES ('1', '25', '1', '1', '0', '1');
-	INSERT INTO `hedge`.`market` (`company_id`, `price`, `year_num`, `game_id`, `stock_purchased`, `long`) VALUES ('2', '25', '1', '1', '0', '1');
+	INSERT INTO `hedge`.`market` (`company_id`, `price`, `year_num`, `game_id`, `stock_purchased`, `long`, `is_bankrupt`) VALUES ('1', '25', '1', '1', '0', '1', '1');
+	INSERT INTO `hedge`.`market` (`company_id`, `price`, `year_num`, `game_id`, `stock_purchased`, `long`, `is_bankrupt`) VALUES ('2', '25', '1', '1', '0', '1', '1');
 
 	-- Add to leaderboard 
     INSERT INTO `hedge`.`leaderboard` (`user_name`, `score`) VALUES ('user1', '250');

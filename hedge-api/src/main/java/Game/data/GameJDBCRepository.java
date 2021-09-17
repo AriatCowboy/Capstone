@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 
@@ -15,6 +17,17 @@ public class GameJDBCRepository implements GameRepository{
 
     public GameJDBCRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @Override
+    public Game findGameById (int gameId){
+        final String sql = "select game_id, user_id, year_number "
+                + "from game "
+                + "where game_id = ?;";
+
+        return jdbcTemplate.query(sql, new GameMapper(), gameId).stream()
+                .findFirst().orElse(null);
+
     }
 
     @Override
