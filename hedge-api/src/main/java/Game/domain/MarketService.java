@@ -1,6 +1,7 @@
 package Game.domain;
 
 import Game.data.MarketRepository;
+import Game.model.Company;
 import Game.model.Market;
 import Game.model.MarketType;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,13 @@ public class MarketService {
     private final MarketRepository repository;
     private final GameService gameService;
     private final MarketTypeService marketTypeService;
+    private final CompanyService companyService;
 
-    public MarketService(MarketRepository repository, GameService gameService, MarketTypeService marketTypeService) {
+    public MarketService(MarketRepository repository, GameService gameService, MarketTypeService marketTypeService, CompanyService companyService) {
         this.repository = repository;
         this.gameService = gameService;
         this.marketTypeService = marketTypeService;
+        this.companyService = companyService;
     }
 
     public List<Market> findByGameId(int gameId) {
@@ -61,7 +64,7 @@ public class MarketService {
 
             int roll = generateRandom(1, 20);
 
-            Result<MarketType> marketType = marketTypeService.findRoll(roll, m.getCompanyId());
+            Result<MarketType> marketType = marketTypeService.findRoll(roll, m.getCompany().getCompanyId());
             int modifier = 0;
             if (isBullMarket()) {
                 modifier = marketType.getPayload().getBullModify();
@@ -110,7 +113,7 @@ public class MarketService {
     }
 
     public boolean setBankrupt(Market market) {
-        if (market.getCompanyId() <= 0 || market.getCompanyId() > 26 || market.getGameId() < 0) {
+        if (market.getCompany().getCompanyId() <= 0 || market.getCompany().getCompanyId() > 26 || market.getGameId() < 0) {
             return false;
         }
 
@@ -133,12 +136,13 @@ public class MarketService {
         do {
             rand = generateRandom(1, 26);
             for (Market m : marketList) {
-                if (m.getCompanyId() == rand) {
+                if (m.getCompany().getCompanyId() == rand) {
                     instances++;
                 }
             }
             if (instances == 0) {
-                Market newMarket = new Market(rand, 25, yearNum, 0, gameId, 0, false, false);
+                Company company = companyService.findById(rand).getPayload();
+                Market newMarket = new Market(company, 25, yearNum, 0, gameId, 0, false, false);
                 marketList.add(newMarket);
                 keepGoing = false;
             }
@@ -155,7 +159,7 @@ public class MarketService {
             return result;
         }
 
-        if (market.getCompanyId() <= 0 || market.getCompanyId() > 26) {
+        if (market.getCompany().getCompanyId() <= 0 || market.getCompany().getCompanyId() > 26) {
             result.addMessage("This company does not exist.", ResultType.NOT_FOUND);
             return result;
         }
