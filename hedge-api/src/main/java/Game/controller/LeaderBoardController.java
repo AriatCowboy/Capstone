@@ -2,7 +2,6 @@ package Game.controller;
 
 import Game.domain.LeaderBoardService;
 import Game.domain.Result;
-import Game.model.AppUser;
 import Game.model.LeaderBoard;
 import Game.utility.JwtConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/leaderboard")
 public class LeaderBoardController {
 
@@ -28,53 +26,13 @@ public class LeaderBoardController {
     }
 
     @GetMapping
-    public ResponseEntity<?> findAll(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
-
-        AppUser user = null;
-
-        if (authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring(7);
-            user = jwtConverter.getUserFromToken(token);
-        }
-
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
+    public ResponseEntity<Object> findAll(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
         Result<List<LeaderBoard>> result = service.findAll();
-
         if (result.isSuccess()) {
-            return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
+            return ResponseEntity.ok(result.getPayload());
         }
         return ErrorResponse.build(result);
     }
-
-
-
-    @GetMapping("/")
-    public ResponseEntity<?> getMapping(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
-        AppUser user = null;
-
-        if (authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring(7);
-            user = jwtConverter.getUserFromToken(token);
-        }
-
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
-        // TODO: use user logic
-
-        return new ResponseEntity<>(user, HttpStatus.OK);
-
-    }
-
-
-
-
-
-
 
     @GetMapping("/addscore")
     public ResponseEntity<Object> addHighScore(String username, int score){
