@@ -19,11 +19,11 @@ class LeaderBoardServiceTest {
     @Autowired
     LeaderBoardRepository leaderBoardRepository;
 
-    @Test
-    void findAll() {
-        List<LeaderBoard> leaderboards = service.findAll();
-        assertEquals(1, leaderboards.size());
-    }
+//    @Test
+//    void findAll() {
+//        List<LeaderBoard> leaderboards = service.findAll();
+//        assertEquals(1, leaderboards.size());
+//    }
 
     @Test
     void addHighScore() {

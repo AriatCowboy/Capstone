@@ -587,7 +587,8 @@
 	INSERT INTO `hedge`.`market_type` (`market_id`,`roll`,`company_id`,`bull_modify`,`bear_modify`) VALUES (518,18,26,-9,9);
 	INSERT INTO `hedge`.`market_type` (`market_id`,`roll`,`company_id`,`bull_modify`,`bear_modify`) VALUES (519,19,26,-11,11);
 	INSERT INTO `hedge`.`market_type` (`market_id`,`roll`,`company_id`,`bull_modify`,`bear_modify`) VALUES (520,20,26,-19,19);
-    
+
+
 delimiter //
 create procedure set_known_good_state()
 begin

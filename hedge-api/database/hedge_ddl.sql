@@ -61,4 +61,3 @@ CREATE TABLE IF NOT EXISTS `hedge`.`market_type` (
     FOREIGN KEY (`company_id`)
     REFERENCES `hedge`.`company` (`company_id`));
     
-

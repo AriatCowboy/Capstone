@@ -18,10 +18,10 @@ class MarketServiceTest {
     @Autowired
     MarketService service;
 
-    @Test
-    void shouldAddMarket() {
-        Market market = new Market(3, 25, 1, 3, 1, 10, false, false);
-
-    }
+//    @Test
+//    void shouldAddMarket() {
+//        Market market = new Market(3, 25, 1, 3, 1, 10, false, false);
+//
+//    }
 
 }

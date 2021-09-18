@@ -31,7 +31,7 @@ public class GameJDBCRepository implements GameRepository{
     }
 
     @Override
-    public Game findGameByUserID (int userId){
+    public Game findGameByUserID (String userId){
         final String sql = "select game_id, user_id, year_number "
                 + "from game "
                 + "where user_id = ?;";

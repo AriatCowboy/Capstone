@@ -31,17 +31,17 @@ class GameServiceTest {
     }
 
 
-    @Test
-    void findGameByUserID() {
-        Game game = service.findGameByUserID(1);
-        assertEquals(1, game.getUserId());
-    }
-
-    @Test
-    void shouldNotFindGameByUserID() {
-        Game game = service.findGameByUserID(2);
-        assertNull(game);
-    }
+//    @Test
+//    void findGameByUserID() {
+//        Game game = service.findGameByUserID(1);
+//        assertEquals(1, game.getUserId());
+//    }
+//
+//    @Test
+//    void shouldNotFindGameByUserID() {
+//        Game game = service.findGameByUserID(2);
+//        assertNull(game);
+//    }
 
     @Test
     void addGame() {

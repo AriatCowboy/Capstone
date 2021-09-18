@@ -2,11 +2,13 @@ package Game.controller;
 
 import Game.domain.Result;
 import Game.domain.ResultType;
+import Game.model.LeaderBoard;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class ErrorResponse {
     private final LocalDateTime timestamp = LocalDateTime.now();
