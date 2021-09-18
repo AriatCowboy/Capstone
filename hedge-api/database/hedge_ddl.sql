@@ -22,8 +22,10 @@ CREATE TABLE IF NOT EXISTS `hedge`.`company` (
     REFERENCES `hedge`.`company_type` (`company_type_id`));
 
 CREATE TABLE IF NOT EXISTS `hedge`.`leaderboard` (
+  `id` INT NOT NULL AUTO_INCREMENT,
   `user_name` VARCHAR(45) NOT NULL,
-  `score` INT NOT NULL);
+  `score` INT NOT NULL,
+  PRIMARY KEY (`id`));
 
 CREATE TABLE IF NOT EXISTS `hedge`.`game` (
   `game_id` INT NOT NULL AUTO_INCREMENT,
