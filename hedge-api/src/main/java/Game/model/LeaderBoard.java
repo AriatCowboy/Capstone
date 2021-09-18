@@ -1,12 +1,14 @@
 package Game.model;
 
 public class LeaderBoard {
+    int id;
     String username;
     int score;
 
     public LeaderBoard(){}
 
-    public LeaderBoard(String username, int score) {
+    public LeaderBoard(int id, String username, int score) {
+        this.id = id;
         this.username = username;
         this.score = score;
     }
@@ -25,5 +27,13 @@ public class LeaderBoard {
 
     public int getScore() {
         return score;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

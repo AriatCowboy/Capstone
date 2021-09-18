@@ -22,8 +22,8 @@ public class GameService {
         }
         return repository.findGameById(gameId);
     }
-    public Game findGameByUserID (int userId){
-        if (userId <= 0) {
+    public Game findGameByUserID (String userId){
+        if (userId == null) {
             return null;
         }
         return repository.findGameByUserID(userId);

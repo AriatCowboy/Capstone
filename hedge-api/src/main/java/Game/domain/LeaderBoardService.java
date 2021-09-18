@@ -12,8 +12,10 @@ public class LeaderBoardService {
     public LeaderBoardService(LeaderBoardRepository repository) {
         this.repository = repository;
     }
-    public List<LeaderBoard> findAll(){
-        return repository.findAll();
+    public Result<List<LeaderBoard>> findAll(){
+        Result<List<LeaderBoard>> result = new Result<>();
+        result.setPayload(repository.findAll());
+        return result;
     }
     public Result<Boolean> addHighScore(String username, int score){
         Result<Boolean> result = new Result<>();

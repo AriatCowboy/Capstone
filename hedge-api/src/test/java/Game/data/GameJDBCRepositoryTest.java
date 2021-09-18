@@ -40,21 +40,21 @@ class GameJDBCRepositoryTest {
         assertNull(game1);
     }
 
-    @Test
-    void shouldFindByUserId() {
-        Game game1 = repository.findGameByUserID(1);
-
-        assertNotNull(game1);
-        assertEquals(1, game1.getGameId());
-        assertEquals(1, game1.getUserId());
-    }
-
-    @Test
-    void shouldNotFindByUserId() {
-        Game game1 = repository.findGameByUserID(5);
-
-        assertNull(game1);
-    }
+//    @Test
+//    void shouldFindByUserId() {
+//        Game game1 = repository.findGameByUserID(1);
+//
+//        assertNotNull(game1);
+//        assertEquals(1, game1.getGameId());
+//        assertEquals(1, game1.getUserId());
+//    }
+//
+//    @Test
+//    void shouldNotFindByUserId() {
+//        Game game1 = repository.findGameByUserID(5);
+//
+//        assertNull(game1);
+//    }
 
     @Test
     void shouldAdd() {

@@ -55,7 +55,7 @@ public class MarketController {
         return ErrorResponse.build(result);
     }
 
-    @PostMapping
+    @PostMapping("/bankrupt")
     public ResponseEntity<Object> setBankrupt(@RequestBody Market market) {
         Boolean result = service.setBankrupt(market);
         if (result) {
