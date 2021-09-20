@@ -2,6 +2,7 @@ package Game.domain;
 
 import Game.data.MarketRepository;
 import Game.model.Company;
+import Game.model.Game;
 import Game.model.Market;
 import Game.model.MarketType;
 import org.springframework.stereotype.Service;
@@ -14,13 +15,11 @@ import java.util.Random;
 public class MarketService {
 
     private final MarketRepository repository;
-    private final GameService gameService;
     private final MarketTypeService marketTypeService;
     private final CompanyService companyService;
 
-    public MarketService(MarketRepository repository, GameService gameService, MarketTypeService marketTypeService, CompanyService companyService) {
+    public MarketService(MarketRepository repository, MarketTypeService marketTypeService, CompanyService companyService) {
         this.repository = repository;
-        this.gameService = gameService;
         this.marketTypeService = marketTypeService;
         this.companyService = companyService;
     }
@@ -49,18 +48,27 @@ public class MarketService {
         return repository.findByCompanyId(companyId, gameId);
     }
 
+    public List<Market> startNewGame (Game game) {
+        List<Market> marketList = new ArrayList<>();
+
+        while (marketList.size() != 10) {
+            marketList = addCompanyToMarket(marketList, game.getLastYear(), game.getGameId());
+        }
+
+        return marketList;
+    }
+
     public List<Market> generateThisYearMarket(int currentYear, int gameId) {
         if (gameId <= 0 || currentYear <= 0) {
             return new ArrayList<>();
         }
 
-        List<Market> marketList = repository.findPortfolio(currentYear - 1, gameId);
+        List<Market> marketList = findPortfolio(gameId, currentYear - 1);
 
         int newlyBankruptCompanies = 0;
 
         for (Market m : marketList) {
             m.setYearNumber(m.getYearNumber() + 1);
-            m.setStockPurchased(0);
 
             int roll = generateRandom(1, 20);
 
@@ -73,6 +81,8 @@ public class MarketService {
             }
 
             m.setPrice(m.getPrice() + modifier);
+            m.setStockPurchasedYear(0);
+            m.setMarketId(0);
 
             if (m.getPrice() <= 0 && !m.getBankrupt()) {
                 m.setPrice(0);
@@ -102,6 +112,8 @@ public class MarketService {
         if (!result.isSuccess()) {
             return result;
         }
+
+        market.setStockPurchasedTotal(market.getStockPurchasedTotal() + market.getStockPurchasedYear());
 
         if(!repository.addMarket(market)) {
             result.addMessage("There was in internal error.", ResultType.INVALID);
@@ -134,6 +146,7 @@ public class MarketService {
         boolean keepGoing = true;
         int instances = 0;
         do {
+            instances = 0;
             rand = generateRandom(1, 26);
             for (Market m : marketList) {
                 if (m.getCompany().getCompanyId() == rand) {
@@ -142,7 +155,7 @@ public class MarketService {
             }
             if (instances == 0) {
                 Company company = companyService.findById(rand).getPayload();
-                Market newMarket = new Market(company, 25, yearNum, 0, gameId, 0, false, false);
+                Market newMarket = new Market(company, 25, yearNum, 0, gameId, 0, 0, false, false);
                 marketList.add(newMarket);
                 keepGoing = false;
             }
@@ -169,8 +182,8 @@ public class MarketService {
             return result;
         }
 
-        if (market.getStockPurchased() < 0) {
-            result.addMessage("Cannot buy negative stocks.", ResultType.INVALID);
+        if (market.getStockPurchasedTotal() < 0) {
+            result.addMessage("Cannot have negative stocks.", ResultType.INVALID);
             return result;
         }
 
@@ -179,10 +192,10 @@ public class MarketService {
             return result;
         }
 
-        if (gameService.findGameById(market.getGameId()) == null) {
-            result.addMessage("There is not a game with this ID.", ResultType.NOT_FOUND);
-            return result;
-        }
+//        if (gameService.findGameById(market.getGameId()) == null) {
+//            result.addMessage("There is not a game with this ID.", ResultType.NOT_FOUND);
+//            return result;
+//        }
 
         return result;
     }
