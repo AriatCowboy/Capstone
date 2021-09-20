@@ -1,7 +1,6 @@
 package Game.domain;
 
 import Game.data.GameRepository;
-import Game.data.MarketRepository;
 import Game.model.Game;
 import Game.model.Market;
 import org.springframework.stereotype.Service;
@@ -46,7 +45,7 @@ public class GameService {
         // If new game
         if (game == null) {
             game = new Game();
-            game.setLastYear(1);
+            game.setYear(1);
             game.setUserId(userId);
             Result<Game> gameResult = addGame(game);
             game = gameResult.getPayload();
@@ -81,10 +80,10 @@ public class GameService {
                 marketService.addMarket(m);
             }
         }
-        game.setLastYear(game.getLastYear() + 1);
+        game.setYear(game.getYear() + 1);
 
         game.setMarkets(marketService.findByGameId(game.getGameId()));
-        List<Market> marketList = marketService.generateThisYearMarket(game.getLastYear(), game.getGameId());
+        List<Market> marketList = marketService.generateThisYearMarket(game.getYear(), game.getGameId());
         List<Market> gameMarketList = game.getMarkets();
         gameMarketList.addAll(marketList);
         game.setMarkets(gameMarketList);
@@ -108,13 +107,16 @@ public class GameService {
         resultboolean.setPayload(repository.updateGameState(game));
         return resultboolean;
     }
-    public boolean deleteGame (int gameId){
-        boolean result = marketService.deleteMarket(gameId);
-        if (result){
-            return repository.deleteGame(gameId);
-        } else {
+    public boolean deleteGame (String userId){
+        Game game = findGameByUserID(userId);
+
+        if (game == null) {
             return false;
         }
+
+        marketService.deleteMarket(game.getGameId());
+
+        return repository.deleteGame(game.getGameId());
     }
 
     private Result<Game> validate(Game game){
@@ -127,7 +129,7 @@ public class GameService {
             result.addMessage("User Id cannot be less than 0.", ResultType.INVALID);
             return result;
         }
-        if (game.getLastYear() <= 0){
+        if (game.getYear() <= 0){
             result.addMessage("Turn/LastYear cannot be less than 0.", ResultType.INVALID);
             return result;
         }
