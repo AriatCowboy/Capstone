@@ -59,4 +59,22 @@ public class GameController {
 
         return new ResponseEntity<>(game, HttpStatus.OK);
     }
+
+    @DeleteMapping()
+    public ResponseEntity<Void> deleteGame(@RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
+        AppUser user = null;
+
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+            user = jwtConverter.getUserFromToken(token);
+        }
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        service.deleteGame(user.getId());
+
+        return ResponseEntity.noContent().build();
+    }
 }
