@@ -21,9 +21,9 @@ public class GameJDBCRepository implements GameRepository{
 
     @Override
     public Game findGameById (int gameId){
-        final String sql = "select game_id, user_id, year_number "
-                + "from game "
-                + "where game_id = ?;";
+        final String sql = "select g.game_id, g.user_id, g.year_number "
+                + "from game g "
+                + "where g.game_id = ?;";
 
         return jdbcTemplate.query(sql, new GameMapper(), gameId).stream()
                 .findFirst().orElse(null);
@@ -49,7 +49,7 @@ public class GameJDBCRepository implements GameRepository{
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, game.getUserId());
+            ps.setString(1, game.getUserId());
             ps.setInt(2, game.getLastYear());
             return ps;
         }, keyHolder);
