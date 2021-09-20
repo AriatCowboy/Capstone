@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `hedge`.`game` (
   `game_id` INT NOT NULL AUTO_INCREMENT,
   `user_id` VARCHAR(45) NOT NULL UNIQUE,
   `year_number` INT NOT NULL,
+  `score` INT NOT NULL,
   PRIMARY KEY (`game_id`));
 
 CREATE TABLE IF NOT EXISTS `hedge`.`market` (

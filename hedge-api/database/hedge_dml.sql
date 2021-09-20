@@ -598,7 +598,7 @@ begin
     alter table game auto_increment = 1;
     
 	-- Create game
-	INSERT INTO `hedge`.`game` (`user_id`, `year_number`) VALUES ('1', '1');
+	INSERT INTO `hedge`.`game` (`user_id`, `year_number`, `score`) VALUES ('1', '1', '10000');
    
 	-- Create market
 	INSERT INTO `hedge`.`market` (`company_id`, `price`, `year_num`, `game_id`, `stock_purchased_total`, `stock_purchased_year`, `long`, `is_bankrupt`) VALUES ('1', '25', '1', '1', '0', '0', '1', '1');
