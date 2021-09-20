@@ -66,7 +66,7 @@ public class GameJDBCRepository implements GameRepository{
     public Boolean updateGameState (Game game){
         final String sql = "update game set "
                 + "year_number = ?, "
-                + "score = ?, "
+                + "score = ? "
                 + "where user_id = ?;";
 
         return jdbcTemplate.update(sql,
