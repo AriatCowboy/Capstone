@@ -21,6 +21,7 @@ public class MarketJDBCRepository implements MarketRepository{
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Override
     public List<Market> findByGameId(int gameId){
         final String sql = "select * from market m "
         + "inner join company c on m.company_id = c.company_id "
@@ -46,7 +47,7 @@ public class MarketJDBCRepository implements MarketRepository{
     }
 
     public boolean addMarket (Market market){
-        final String sql = "insert into market (company_id, price, year_num, game_id, stock_purchased, `long`, `is_bankrupt`) values (?,?,?,?,?,?,?);";
+        final String sql = "insert into market (company_id, price, year_num, game_id, stock_purchased_total, stock_purchased_year, `long`, `is_bankrupt`) values (?,?,?,?,?,?,?,?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -54,9 +55,10 @@ public class MarketJDBCRepository implements MarketRepository{
             ps.setInt(2, market.getPrice());
             ps.setInt(3, market.getYearNumber());
             ps.setInt(4, market.getGameId());
-            ps.setInt(5, market.getStockPurchased());
-            ps.setBoolean(6, market.getLongInvestment());
-            ps.setBoolean(7, market.getBankrupt());
+            ps.setInt(5, market.getStockPurchasedTotal());
+            ps.setInt(6, market.getStockPurchasedYear());
+            ps.setBoolean(7, market.getLongInvestment());
+            ps.setBoolean(8, market.getBankrupt());
             return ps;
         }, keyHolder);
         return rowsAffected > 0;
