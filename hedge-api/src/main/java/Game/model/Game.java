@@ -5,15 +5,18 @@ import java.util.List;
 public class Game {
     int gameId;
     String userId;
-    int lastYear;
+    int year;
+    int score;
     List<Market> markets;
 
-    public Game(){}
+    public Game() {
+    }
 
-    public Game(int gameId, String userId, int lastYear, List<Market> markets) {
+    public Game(int gameId, String userId, int year, int score, List<Market> markets) {
         this.gameId = gameId;
         this.userId = userId;
-        this.lastYear = lastYear;
+        this.year = year;
+        this.score = score;
         this.markets = markets;
     }
 
@@ -33,12 +36,20 @@ public class Game {
         this.userId = userId;
     }
 
-    public int getLastYear() {
-        return lastYear;
+    public int getYear() {
+        return year;
     }
 
-    public void setLastYear(int lastYear) {
-        this.lastYear = lastYear;
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public List<Market> getMarkets() {
@@ -49,3 +60,4 @@ public class Game {
         this.markets = markets;
     }
 }
+
