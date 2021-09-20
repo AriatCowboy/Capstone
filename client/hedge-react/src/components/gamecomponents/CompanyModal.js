@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import {
   Button,
   Image,
@@ -11,36 +11,43 @@ import {
 } from "semantic-ui-react";
 
 import AuthContext from "../../AuthContext";
-import C1 from "../picturecomponents/Acedemiic.png";
-import C2 from "../picturecomponents/HealthHarbor.png";
-import C3 from "../picturecomponents/LeisureMachine.png";
-import C4 from "../picturecomponents/SocialCells.png";
-import C5 from "../picturecomponents/UXGallery.png";
-import C6 from "../picturecomponents/BrightMiner.png";
-import C7 from "../picturecomponents/Digitalic.png";
-import C8 from "../picturecomponents/Earthzy.png";
-import C9 from "../picturecomponents/EcoAlley.png";
-import C10 from "../picturecomponents/Modaxy.png";
-import C11 from "../picturecomponents/Tourux.png";
-import C12 from "../picturecomponents/CargoAcer.png";
-import C13 from "../picturecomponents/PowerLy.png";
-import C14 from "../picturecomponents/RivalIndustry.png";
-import C15 from "../picturecomponents/SupplyPhase.png";
-import C16 from "../picturecomponents/UltraFoundry.png";
-import C17 from "../picturecomponents/Agribuilder.png";
-import C18 from "../picturecomponents/CoalStove.png";
-import C19 from "../picturecomponents/PetroYield.png";
-import C20 from "../picturecomponents/ProsperityFuel.png";
-import C21 from "../picturecomponents/TimberFly.png";
-import C22 from "../picturecomponents/Cammunition.png";
-import C23 from "../picturecomponents/Grandlytics.png";
-import C24 from "../picturecomponents/Pharmanetic.png";
-import C25 from "../picturecomponents/Protectice.png";
-import C26 from "../picturecomponents/SimplySentient.png";
+import CompanyImage from "./CompanyImage";
 
-function ModalExampleContentImage() {
+function CompanyModel({ value = [] }) {
+  console.log(value);
   // 1. Renders correct company based on back-end result
+  // const [markets, setMarkets] = useState([]);
+
+  // const [currentMarkets, setCurrentMarkets];
   // 2. Sets all starting values for company in their appropriate rendering]
+
+  const auth = useContext(AuthContext);
+
+  //  const getMarkets = () => {
+  //    const init = {
+  //      headers: {
+  //        "Access-Control-Allow-Origin": "http://localhost:3000",
+  //        Authorization: `Bearer ${auth.user.token}`,
+  //      },
+  //    };
+
+  //    return fetch("http://localhost:8080/api/market", init)
+  //      .then((response) => response.json())
+  //      .then((data) => setMarkets(data))
+  //      .catch((error) => console.log("Error", error));
+  //  };
+
+  //  const currentMarkets = (getMarkets) => {
+  //    for (let i = 0; i < getMarkets.size(); i++) {
+  //      if (
+  //        !getMarkets[i].isBankrupt &&
+  //        getMarkets[i].yearNumber === Game.lastYear
+  //      ) {
+  //        currentMarket.push(getMarkets[i]);
+  //      }
+  //    }
+  //    return currentMarket;
+  //  };
   // 3. Buttons have functionality that allow user to "place bet", adds to "portfolio"
 
   // Validation
@@ -49,7 +56,7 @@ function ModalExampleContentImage() {
 
   // ToDo: add message for total cost of position based on #stocks * price
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const numberOfStocks = [
     { key: 10, value: 10, text: "10" },
     { key: 20, value: 20, text: "20" },
@@ -72,17 +79,25 @@ function ModalExampleContentImage() {
             <Grid.Row>
               <Grid.Column width={8}>
                 <Modal.Content>
-                  <Image size="large" src={C5} wrapped />
+                  <CompanyImage
+                    fomrat="modal"
+                    companyId={value.company?.companyId}
+                  />
                 </Modal.Content>
               </Grid.Column>
               <Modal.Content>
                 <Modal.Description>
                   <Label wrapped size="big">
-                    <Header>UXGallery</Header>
-                    <p>Dividend per turn: $XX</p>
-                    <p>Current Price: $XX</p>
-                    <p>Last Year's Price: $XX</p>
-                    <p>Available Stocks: #XX</p>
+                    {value.map((market) => (
+                      <>
+                        <Header key={market.marketId}>{market.marketId}</Header>
+                        {/* <p>Dividend per turn: ${market.company.dividend}</p>
+                        <p>Current Price: ${market.price}</p>
+                  
+                        <p>Last Year's Price: </p>
+                        <p>Available Stocks: #{100 - market.stockPurchasedTotal}</p> */}
+                      </>
+                    ))}
                   </Label>
                   <Header>Put a Position on UXGallery?</Header>
                   <div>
@@ -119,7 +134,7 @@ function ModalExampleContentImage() {
       open={open}
       trigger={
         <Button inverted size="mini">
-          <Image class="ui large image" src={C5}></Image>
+          <CompanyImage companyId={value.company?.companyId} />
         </Button>
       }
     >
@@ -131,4 +146,4 @@ function ModalExampleContentImage() {
   );
 }
 
-export default ModalExampleContentImage;
+export default CompanyModel;

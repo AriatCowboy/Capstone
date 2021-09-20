@@ -1,0 +1,20 @@
+@hostname = localhost
+@port = 5000
+@host = {{hostname}}:{{port}}
+@baseurl = http://{{host}}
+
+@token =eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXYxMC11c2Vycy1hcGkiLCJzdWIiOiJqb2huc21pdGgiLCJpZCI6Ijk4M2YxMjI0LWFmNGYtMTFlYi04MzY4LTAyNDJhYzExMDAwMiIsImZpcnN0X25hbWUiOiJKb2huIiwibGFzdF9uYW1lIjoiU21pdGgiLCJlbWFpbF9hZGRyZXNzIjoiam9obkBzbWl0aC5jb20iLCJtb2JpbGVfcGhvbmUiOiI1NTUtNTU1LTU1NTUiLCJyb2xlcyI6IkFETUlOIiwiZXhwIjoxNjMyMjM3NTQyfQ.lCG-beEOlXmcmHsrzzUDczHZEZ2tG0ELap46nZFO5hQ
+
+###
+POST {{baseurl}}/authenticate HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "johnsmith",
+    "password": "P@ssw0rd!"
+}
+
+###
+
+GET {{url}} HTTP/1.1
+Authorization: Bearer {{token}}

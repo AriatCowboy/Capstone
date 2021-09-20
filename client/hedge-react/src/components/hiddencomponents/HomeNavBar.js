@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import AuthContext from "../../AuthContext";
@@ -21,12 +21,14 @@ function HomeNavBar() {
         </Grid.Column>
 
         <Grid.Column textAlign="center" width={8}>
-          <Link to="/game">
-            <Button inverted color="green">
-              <i class="play icon"></i>
-              Play Game!
-            </Button>
-          </Link>
+          {auth.user && (
+            <Link to="/game">
+              <Button color="green">
+                <i class="play icon"></i>
+                Play Game!
+              </Button>
+            </Link>
+          )}
 
           <Link to="/info">
             <Button inverted>
