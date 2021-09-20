@@ -4,6 +4,7 @@ import Game.data.GameRepository;
 import Game.model.Game;
 import Game.model.Market;
 import org.springframework.stereotype.Service;
+import org.yaml.snakeyaml.error.Mark;
 
 import java.util.List;
 
@@ -45,7 +46,6 @@ public class GameService {
         // If new game
         if (game == null) {
             game = new Game();
-            game.setYear(1);
             game.setUserId(userId);
             Result<Game> gameResult = addGame(game);
             game = gameResult.getPayload();
@@ -63,6 +63,8 @@ public class GameService {
     }
 
     public Result<Game> addGame(Game game){
+        game.setYear(1);
+        game.setScore(10000);
         Result<Game> result = validate(game);
         if (!result.isSuccess()){
             return result;
@@ -73,13 +75,20 @@ public class GameService {
     }
 
     public Game nextRound(Game game) {
-        updateGameState(game);
+        int value = 0;
+
+        if (!validate(game).isSuccess() || !validateNextRound(game)) {
+            return game;
+        }
 
         for (Market m : game.getMarkets()) {
             if  (m.getMarketId() == 0) {
+                value = m.getStockPurchasedYear() * m.getPrice();
+                game.setScore(game.getScore() - value);
                 marketService.addMarket(m);
             }
         }
+        updateGameState(game);
         game.setYear(game.getYear() + 1);
 
         game.setMarkets(marketService.findByGameId(game.getGameId()));
@@ -117,6 +126,16 @@ public class GameService {
         marketService.deleteMarket(game.getGameId());
 
         return repository.deleteGame(game.getGameId());
+    }
+
+    private boolean validateNextRound(Game game) {
+        for (Market m : game.getMarkets()) {
+            if (m.getYearNumber() == game.getYear() &&
+                ((m.getStockPurchasedTotal() + m.getStockPurchasedYear() > 100 ) || (m.getStockPurchasedTotal() + m.getStockPurchasedYear() < 0 ))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private Result<Game> validate(Game game){
