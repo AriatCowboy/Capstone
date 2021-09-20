@@ -14,6 +14,7 @@ public class GameMapper implements RowMapper<Game> {
         game.setGameId(resultSet.getInt("game_id"));
         game.setYear(resultSet.getInt("year_number"));
         game.setUserId(resultSet.getString("user_id"));
+        game.setScore(resultSet.getInt("score"));
         return game;
     }
 }
