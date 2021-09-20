@@ -1,5 +1,49 @@
+#year {
+  font-size: 35px;
+  font-style: italic;
+  color:yellow;
+
+}
+
+#error-message {
+  width: fit-content;
+}
+
+#leaderboard-paragraph {
+  color: yellow;
+  font-size: 15px;
+}
+#leaderboard {
+  width: 50%;
+  margin: auto;
+}
+
+#account {
+  font-size: 15px;
+  color: yellow;
+}
+
+#subheader {
+  font-size: 55px;
+  font-style: italic;
+  color: yellow;
+}
+
+#header {
+  font-size: 85px;
+  font-style: italic;
+  color: yellow;
+}
+
+#subheader {
+  font-size: 55px;
+  font-style: italic;
+  color: yellow;
+}
+
 #info-menu {
   margin: 10px;
+  font-size: larger;
   color: yellow;
 }
 

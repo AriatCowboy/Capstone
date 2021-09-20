@@ -1,14 +1,18 @@
+import React from "react";
+import { Message } from "semantic-ui-react";
+
 function Errors({ errors = [] }) {
   if (errors.length === 0) {
     return null;
   }
 
   return (
-    <div className="alert alert-danger">
+    <Message color="red" compact floating>
+      <Message.Header>Errors...</Message.Header>
       {errors.map((error) => (
-        <li key={error}>{error}</li>
+        <Message.List key={error}>{error}</Message.List>
       ))}
-    </div>
+    </Message>
   );
 }
 

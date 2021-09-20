@@ -4,7 +4,7 @@ function HowToPlay() {
   return (
     <>
       <InfoNavbar />
-      <h1>HowToPlay</h1>
+      <h1 id="subheader">HowToPlay</h1>
     </>
   );
 }

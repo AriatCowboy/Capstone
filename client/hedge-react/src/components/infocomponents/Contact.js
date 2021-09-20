@@ -4,7 +4,7 @@ function Contact() {
   return (
     <>
       <InfoNavbar />
-      <h1>Contact</h1>
+      <h1 id="subheader">Contact</h1>
     </>
   );
 }
