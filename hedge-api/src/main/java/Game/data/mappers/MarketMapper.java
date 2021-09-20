@@ -17,7 +17,8 @@ public class MarketMapper implements RowMapper<Market> {
         market.setYearNumber(resultSet.getInt("year_num"));
         market.setMarketId(resultSet.getInt("market_id"));
         market.setGameId(resultSet.getInt("game_id"));
-        market.setStockPurchased(resultSet.getInt("stock_purchased"));
+        market.setStockPurchasedTotal(resultSet.getInt("stock_purchased_total"));
+        market.setStockPurchasedYear(resultSet.getInt("stock_purchased_year"));
         market.setLongInvestment(resultSet.getBoolean("long"));
         market.setBankrupt(resultSet.getBoolean("is_bankrupt"));
 
