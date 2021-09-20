@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -50,7 +49,7 @@ public class GameJDBCRepository implements GameRepository{
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, game.getUserId());
-            ps.setInt(2, game.getLastYear());
+            ps.setInt(2, game.getYear());
             return ps;
         }, keyHolder);
 
@@ -69,7 +68,7 @@ public class GameJDBCRepository implements GameRepository{
                 + "where user_id = ?;";
 
         return jdbcTemplate.update(sql,
-                game.getLastYear(),
+                game.getYear(),
                 game.getUserId()) > 0;
     }
 
