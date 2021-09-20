@@ -6,20 +6,22 @@ public class Market {
     int yearNumber;
     int marketId;
     int gameId;
-    int stockPurchased;
+    int stockPurchasedYear;
+    int stockPurchasedTotal;
     Boolean isLongInvestment;
     Boolean isBankrupt;
 
     public Market() {
     }
 
-    public Market(Company company, int price, int yearNumber, int marketId, int gameId, int stockPurchased, Boolean isLongInvestment, Boolean isBankrupt) {
+    public Market(Company company, int price, int yearNumber, int marketId, int gameId, int stockPurchasedYear, int stockPurchasedTotal, Boolean isLongInvestment, Boolean isBankrupt) {
         this.company = company;
         this.price = price;
         this.yearNumber = yearNumber;
         this.marketId = marketId;
         this.gameId = gameId;
-        this.stockPurchased = stockPurchased;
+        this.stockPurchasedYear = stockPurchasedYear;
+        this.stockPurchasedTotal = stockPurchasedTotal;
         this.isLongInvestment = isLongInvestment;
         this.isBankrupt = isBankrupt;
     }
@@ -64,12 +66,20 @@ public class Market {
         this.gameId = gameId;
     }
 
-    public int getStockPurchased() {
-        return stockPurchased;
+    public int getStockPurchasedYear() {
+        return stockPurchasedYear;
     }
 
-    public void setStockPurchased(int stockPurchased) {
-        this.stockPurchased = stockPurchased;
+    public void setStockPurchasedYear(int stockPurchasedYear) {
+        this.stockPurchasedYear = stockPurchasedYear;
+    }
+
+    public int getStockPurchasedTotal() {
+        return stockPurchasedTotal;
+    }
+
+    public void setStockPurchasedTotal(int stockPurchasedTotal) {
+        this.stockPurchasedTotal = stockPurchasedTotal;
     }
 
     public Boolean getLongInvestment() {
@@ -87,5 +97,5 @@ public class Market {
     public void setBankrupt(Boolean bankrupt) {
         isBankrupt = bankrupt;
     }
-
 }
+
