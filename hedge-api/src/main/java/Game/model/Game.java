@@ -1,16 +1,20 @@
 package Game.model;
 
+import java.util.List;
+
 public class Game {
     int gameId;
-    int userId;
+    String userId;
     int lastYear;
+    List<Market> markets;
 
     public Game(){}
 
-    public Game(int gameId, int userId, int lastYear) {
+    public Game(int gameId, String userId, int lastYear, List<Market> markets) {
         this.gameId = gameId;
         this.userId = userId;
         this.lastYear = lastYear;
+        this.markets = markets;
     }
 
     public int getGameId() {
@@ -21,11 +25,11 @@ public class Game {
         this.gameId = gameId;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -35,5 +39,13 @@ public class Game {
 
     public void setLastYear(int lastYear) {
         this.lastYear = lastYear;
+    }
+
+    public List<Market> getMarkets() {
+        return markets;
+    }
+
+    public void setMarkets(List<Market> markets) {
+        this.markets = markets;
     }
 }
