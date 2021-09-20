@@ -1,3 +1,5 @@
+import React from "react";
+
 function Settings() {
   return <h1 id="header">Settings</h1>;
 }

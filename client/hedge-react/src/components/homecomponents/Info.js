@@ -1,3 +1,4 @@
+import React from "react";
 import InfoNavbar from "../hiddencomponents/InfoNavBar";
 
 function Info() {

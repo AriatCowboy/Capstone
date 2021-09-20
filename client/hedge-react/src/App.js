@@ -25,7 +25,7 @@ import HowToPlay from "./components/infocomponents/HowToPlay";
 import Leaderboard from "./components/infocomponents/Leaderboard";
 
 function Home() {
-  return <h2>Home</h2>;
+  return <h2 id="header">Home</h2>;
 }
 
 function App() {
@@ -33,7 +33,6 @@ function App() {
 
   const login = (token) => {
     const decodedTokenPayload = jwt_decode(token);
-
     const roles = decodedTokenPayload.roles.split(",");
 
     const user = {
@@ -92,7 +91,7 @@ function App() {
               </Route>
 
               <Route path="/info/leaderboard">
-                <Leaderboard />
+                {auth.user ? <Leaderboard /> : <Redirect to="/login" />}
               </Route>
 
               <Route path="/settings">
@@ -107,7 +106,7 @@ function App() {
                 <Register />
               </Route>
 
-              <Route path="/not_found">
+              <Route path="*">
                 <NotFound />
               </Route>
             </Switch>

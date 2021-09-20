@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Input, Button, Header } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 
 import AuthContext from "../../AuthContext";
 import Errors from "../hiddencomponents/Errors";
@@ -79,7 +79,7 @@ export default function Register() {
       <Errors errors={errorList} />
       <form onSubmit={handleSubmit}>
         <div>
-        <br />
+          <br />
           <label>Username: </label>
           <input
             type="text"
@@ -87,7 +87,7 @@ export default function Register() {
           />
         </div>
         <div>
-        <br />
+          <br />
           <label>Password: </label>
           <input
             type="password"
@@ -95,7 +95,7 @@ export default function Register() {
           />
         </div>
         <div>
-        <br />
+          <br />
           <label>Confirm Password:</label>
           <input
             type="password"
@@ -103,10 +103,12 @@ export default function Register() {
           />
         </div>
         <div>
-        <br />
+          <br />
           <Button type="submit">Register</Button>
           <br />
-          <Link id="account" to="/login">I already have an account</Link>
+          <Link id="account" to="/login">
+            I already have an account
+          </Link>
         </div>
       </form>
     </div>
