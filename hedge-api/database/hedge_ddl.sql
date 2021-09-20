@@ -39,7 +39,8 @@ CREATE TABLE IF NOT EXISTS `hedge`.`market` (
   `year_num` INT NOT NULL,
   `market_id` INT NOT NULL AUTO_INCREMENT,
   `game_id` INT NOT NULL,
-  `stock_purchased` INT NOT NULL,
+  `stock_purchased_total` INT NOT NULL,
+  `stock_purchased_year` INT NOT NULL,
   `long` TINYINT NOT NULL,
   `is_bankrupt` TINYINT NOT NULL,
   INDEX `fk_company_id_idx` (`company_id` ASC) VISIBLE,
@@ -61,3 +62,4 @@ CREATE TABLE IF NOT EXISTS `hedge`.`market_type` (
     FOREIGN KEY (`company_id`)
     REFERENCES `hedge`.`company` (`company_id`));
     
+
