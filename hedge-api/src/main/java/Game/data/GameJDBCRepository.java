@@ -20,7 +20,7 @@ public class GameJDBCRepository implements GameRepository{
 
     @Override
     public Game findGameById (int gameId){
-        final String sql = "select g.game_id, g.user_id, g.year_number "
+        final String sql = "select g.game_id, g.user_id, g.year_number, g.score "
                 + "from game g "
                 + "where g.game_id = ?;";
 
@@ -31,7 +31,7 @@ public class GameJDBCRepository implements GameRepository{
 
     @Override
     public Game findGameByUserID (String userId){
-        final String sql = "select game_id, user_id, year_number "
+        final String sql = "select game_id, user_id, year_number, score "
                 + "from game "
                 + "where user_id = ?;";
 
@@ -42,14 +42,15 @@ public class GameJDBCRepository implements GameRepository{
 
     @Override
     public Game addGame (Game game){
-        final String sql = "insert into game (user_id, year_number) "
-                + " values (?,?);";
+        final String sql = "insert into game (user_id, year_number, score) "
+                + " values (?,?,?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, game.getUserId());
             ps.setInt(2, game.getYear());
+            ps.setInt(3, game.getScore());
             return ps;
         }, keyHolder);
 
@@ -64,11 +65,13 @@ public class GameJDBCRepository implements GameRepository{
     @Override
     public Boolean updateGameState (Game game){
         final String sql = "update game set "
-                + "year_number = ? "
+                + "year_number = ?, "
+                + "score = ?, "
                 + "where user_id = ?;";
 
         return jdbcTemplate.update(sql,
                 game.getYear(),
+                game.getScore(),
                 game.getUserId()) > 0;
     }
 
