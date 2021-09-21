@@ -1,0 +1,217 @@
+@hostname = localhost
+@port = 8080
+@host = {{hostname}}:{{port}}
+
+@baseurl = http://{{host}}/api
+
+@url = {{baseurl}}/game
+
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZXYxMC11c2Vycy1hcGkiLCJzdWIiOiJqb2huc21pdGgiLCJpZCI6Ijk4M2YxMjI0LWFmNGYtMTFlYi04MzY4LTAyNDJhYzExMDAwMiIsImZpcnN0X25hbWUiOiJKb2huIiwibGFzdF9uYW1lIjoiU21pdGgiLCJlbWFpbF9hZGRyZXNzIjoiam9obkBzbWl0aC5jb20iLCJtb2JpbGVfcGhvbmUiOiI1NTUtNTU1LTU1NTUiLCJyb2xlcyI6IkFETUlOIiwiZXhwIjoxNjMyMjM3NjI4fQ.9RqRe0_r2sw_Hb3FwW1LV7D_CdTqxTA_uQfBMFo_a6I
+###
+
+GET {{url}} HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+
+POST {{url}} HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "gameId": 1,
+  "userId": "983f1224-af4f-11eb-8368-0242ac110002",
+  "lastYear": 1,
+  "markets": [
+    {
+      "company": {
+        "companyId": 13,
+        "name": "PowerLy",
+        "companyTypeName": "Industrial",
+        "defaultStockPrice": 25,
+        "risk": "Low",
+        "stockTotal": 100,
+        "dividend": 15
+      },
+      "price": 25,
+      "yearNumber": 1,
+      "marketId": 0,
+      "gameId": 1,
+      "stockPurchasedYear": 20,
+      "stockPurchasedTotal": 0,
+      "bankrupt": false,
+      "longInvestment": false
+    },
+    {
+      "company": {
+        "companyId": 23,
+        "name": "Grandlytics",
+        "companyTypeName": "Tech",
+        "defaultStockPrice": 25,
+        "risk": "Medium",
+        "stockTotal": 100,
+        "dividend": 25
+      },
+      "price": 25,
+      "yearNumber": 1,
+      "marketId": 0,
+      "gameId": 1,
+      "stockPurchasedYear": 0,
+      "stockPurchasedTotal": 0,
+      "bankrupt": false,
+      "longInvestment": false
+    },
+    {
+      "company": {
+        "companyId": 16,
+        "name": "Ultra Foundry",
+        "companyTypeName": "Industrial",
+        "defaultStockPrice": 25,
+        "risk": "Low",
+        "stockTotal": 100,
+        "dividend": 15
+      },
+      "price": 25,
+      "yearNumber": 1,
+      "marketId": 0,
+      "gameId": 1,
+      "stockPurchasedYear": 0,
+      "stockPurchasedTotal": 0,
+      "bankrupt": false,
+      "longInvestment": false
+    },
+    {
+      "company": {
+        "companyId": 8,
+        "name": "Earthzy",
+        "companyTypeName": "Hybrid",
+        "defaultStockPrice": 25,
+        "risk": "Low",
+        "stockTotal": 100,
+        "dividend": 20
+      },
+      "price": 25,
+      "yearNumber": 1,
+      "marketId": 0,
+      "gameId": 1,
+      "stockPurchasedYear": 0,
+      "stockPurchasedTotal": 0,
+      "bankrupt": false,
+      "longInvestment": false
+    },
+    {
+      "company": {
+        "companyId": 21,
+        "name": "TimberFly",
+        "companyTypeName": "Natural Res.",
+        "defaultStockPrice": 25,
+        "risk": "Low",
+        "stockTotal": 100,
+        "dividend": 10
+      },
+      "price": 25,
+      "yearNumber": 1,
+      "marketId": 0,
+      "gameId": 1,
+      "stockPurchasedYear": 0,
+      "stockPurchasedTotal": 0,
+      "bankrupt": false,
+      "longInvestment": false
+    },
+    {
+      "company": {
+        "companyId": 19,
+        "name": "PetroYield",
+        "companyTypeName": "Natural Res.",
+        "defaultStockPrice": 25,
+        "risk": "Low",
+        "stockTotal": 100,
+        "dividend": 10
+      },
+      "price": 25,
+      "yearNumber": 1,
+      "marketId": 0,
+      "gameId": 1,
+      "stockPurchasedYear": 0,
+      "stockPurchasedTotal": 0,
+      "bankrupt": false,
+      "longInvestment": false
+    },
+    {
+      "company": {
+        "companyId": 20,
+        "name": "Prosperity Fuel",
+        "companyTypeName": "Natural Res.",
+        "defaultStockPrice": 25,
+        "risk": "Medium",
+        "stockTotal": 100,
+        "dividend": 30
+      },
+      "price": 25,
+      "yearNumber": 1,
+      "marketId": 0,
+      "gameId": 1,
+      "stockPurchasedYear": 0,
+      "stockPurchasedTotal": 0,
+      "bankrupt": false,
+      "longInvestment": false
+    },
+    {
+      "company": {
+        "companyId": 24,
+        "name": "Pharmanetic",
+        "companyTypeName": "Tech",
+        "defaultStockPrice": 25,
+        "risk": "Medium",
+        "stockTotal": 100,
+        "dividend": 30
+      },
+      "price": 25,
+      "yearNumber": 1,
+      "marketId": 0,
+      "gameId": 1,
+      "stockPurchasedYear": 0,
+      "stockPurchasedTotal": 0,
+      "bankrupt": false,
+      "longInvestment": false
+    },
+    {
+      "company": {
+        "companyId": 14,
+        "name": "Rival Industry",
+        "companyTypeName": "Industrial",
+        "defaultStockPrice": 25,
+        "risk": "Medium",
+        "stockTotal": 100,
+        "dividend": 30
+      },
+      "price": 25,
+      "yearNumber": 1,
+      "marketId": 0,
+      "gameId": 1,
+      "stockPurchasedYear": 0,
+      "stockPurchasedTotal": 0,
+      "bankrupt": false,
+      "longInvestment": false
+    },
+    {
+      "company": {
+        "companyId": 7,
+        "name": "Digitalic",
+        "companyTypeName": "Hybrid",
+        "defaultStockPrice": 25,
+        "risk": "High",
+        "stockTotal": 100,
+        "dividend": 35
+      },
+      "price": 25,
+      "yearNumber": 1,
+      "marketId": 0,
+      "gameId": 1,
+      "stockPurchasedYear": 0,
+      "stockPurchasedTotal": 0,
+      "bankrupt": false,
+      "longInvestment": false
+    }
+  ]
+}
