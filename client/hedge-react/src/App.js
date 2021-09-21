@@ -5,6 +5,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import ReactPlayer from 'react-player'
 import jwt_decode from "jwt-decode";
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
@@ -117,6 +118,7 @@ function App() {
       <video id="backdrop" autoPlay loop muted>
         <source src={backDropVideo} type="video/mp4" />
       </video>
+      <ReactPlayer url='https://soundcloud.com/ariat-cowboy/untitled-1' pip loop={true} playing={true} volume=".05" height="0" width="0"/>
     </>
   );
 }
