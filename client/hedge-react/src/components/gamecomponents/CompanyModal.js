@@ -13,7 +13,7 @@ import AuthContext from "../../AuthContext";
 import CompanyImage from "./CompanyImage";
 
 function CompanyModel({ value = [] }) {
-  console.log(value);
+  const [stockAmount, setStockAmount] = useState(0);
 
   // const [markets, setMarkets] = useState([]);
 
@@ -48,10 +48,15 @@ function CompanyModel({ value = [] }) {
   //  };
 
   const placeBetFor = () => {
+    value.stockPurchasedYear = stockAmount
+    value.longInvestment = true
+
     return;
   };
 
   const placeBetAgainst = () => {
+    value.stockPurchasedYear = stockAmount
+    value.longInvestment = false
     return;
   };
 
@@ -68,6 +73,11 @@ function CompanyModel({ value = [] }) {
     { key: 90, value: 90, text: "90" },
     { key: 100, value: 100, text: "100" },
   ];
+
+  const handleStockAmountChange = (event) => {
+    setStockAmount(event.target.valueAsNumber);
+  };
+
 
   const panes = [
     {
@@ -93,22 +103,46 @@ function CompanyModel({ value = [] }) {
                     <p>Dividend per turn: ${value.company?.dividend}</p>
                     <p>Current Price: ${value?.price}</p>
                     {/* Update this to present correct last year price */}
-                    <p>Last Year's Price: ${value?.price}</p>
+                    <p>Last Year's Price: ${value?.lastYearPrice}</p>
                     <p>Available Stocks: #{100 - value?.stockPurchasedTotal}</p>
                   </Label>
-                  <Header>Put a Position on {value.company?.name}?</Header>
-                  <div>
-                    <Select
-                      placeholder="# of Stocks"
-                      options={numberOfStocks}
-                    ></Select>
-                    <Button onClick={placeBetFor} color="green">
-                      Bet For
-                    </Button>
-                    <Button onClick={placeBetAgainst} color="red">
-                      Bet Against
-                    </Button>
-                  </div>
+                  {value.yearNumber !== 10 ? (
+                    <Header>Put a Position on {value.company?.name}?</Header>
+                  ) : null
+                  }
+                  {value.stockPurchasedTotal === 0 && value.yearNumber !== 10 ?
+                    (
+                      <div>
+                        <input id="edit-stock-amount" name="stockAmount" value={stockAmount} onChange={handleStockAmountChange} type="number"></input>
+                        <Button onClick={placeBetFor} color="green">
+                          Bet For
+                        </Button>
+                        <Button onClick={placeBetAgainst} color="red">
+                          Bet Against
+                        </Button>
+                      </div>
+                    ) : null
+                  }
+                  {value.stockPurchasedTotal !== 0 && value.longInvestment == true && value.yearNumber !== 10 ?
+                    (
+                      <div>
+                        <input id="edit-stock-amount" name="stockAmount" value={stockAmount} onChange={handleStockAmountChange} type="number"></input>
+                        <Button onClick={placeBetFor} color="green">
+                          Bet For
+                        </Button>
+                      </div>
+                    ) : null
+                  }
+                  {value.stockPurchasedTotal !== 0 && value.longInvestment == false && value.yearNumber !== 10 ?
+                    (
+                      <div>
+                        <input id="edit-stock-amount" name="stockAmount" value={stockAmount} onChange={handleStockAmountChange} type="number"></input>
+                        <Button onClick={placeBetAgainst} color="red">
+                          Bet Against
+                        </Button>
+                      </div>
+                    ) : null
+                  }
                 </Modal.Description>
 
                 <Modal.Actions>
@@ -127,6 +161,7 @@ function CompanyModel({ value = [] }) {
       render: () => <Tab.Pane></Tab.Pane>,
     },
   ];
+
 
   return (
     <Modal
