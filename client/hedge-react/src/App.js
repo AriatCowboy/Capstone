@@ -5,14 +5,13 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import ReactAudioPlayer from 'react-audio-player';
+import ReactPlayer from 'react-player'
 import jwt_decode from "jwt-decode";
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
 
 import AuthContext from "./AuthContext";
 
-import sound from "./components/audiocomponents/untitled.mp3";
 import backDropVideo from "./components/videocomponents/backDropVideo.mp4";
 import HomeNavBar from "./components/hiddencomponents/HomeNavBar";
 import Game from "./components/homecomponents/Game";
@@ -119,7 +118,7 @@ function App() {
       <video id="backdrop" autoPlay loop muted>
         <source src={backDropVideo} type="video/mp4" />
       </video>
-      <ReactAudioPlayer src={sound} autoPlay={true} loop controls={false} volume={0.05}/>
+      <ReactPlayer url='https://soundcloud.com/ariat-cowboy/untitled-1' pip loop={true} playing={true} volume=".05" height="0" width="0"/>
     </>
   );
 }
