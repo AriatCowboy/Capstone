@@ -3,6 +3,7 @@ package Game.model;
 public class Market {
     Company company;
     int price;
+    int lastYearPrice;
     int yearNumber;
     int marketId;
     int gameId;
@@ -96,6 +97,14 @@ public class Market {
 
     public void setBankrupt(Boolean bankrupt) {
         isBankrupt = bankrupt;
+    }
+
+    public int getLastYearPrice() {
+        return lastYearPrice;
+    }
+
+    public void setLastYearPrice(int lastYearPrice) {
+        this.lastYearPrice = lastYearPrice;
     }
 }
 
