@@ -1,13 +1,5 @@
-import {
-  Button,
-  Image,
-  Modal,
-  Header,
-  Select,
-  Tab,
-  Label,
-  Grid,
-} from "semantic-ui-react";
+import { React } from "react";
+import { Image } from "semantic-ui-react";
 
 import C1 from "../picturecomponents/Acedemiic.png";
 import C2 from "../picturecomponents/HealthHarbor.png";
@@ -38,7 +30,7 @@ import C26 from "../picturecomponents/SimplySentient.png";
 
 function CompanyImage({ companyId, format }) {
   let image = null;
-  console.log(companyId);
+
   switch (companyId) {
     case 1:
       image = C1;
@@ -100,8 +92,48 @@ function CompanyImage({ companyId, format }) {
       image = C15;
       break;
 
+    case 16:
+      image = C16;
+      break;
+
+    case 17:
+      image = C17;
+      break;
+
+    case 18:
+      image = C18;
+      break;
+
+    case 19:
+      image = C19;
+      break;
+
+    case 20:
+      image = C20;
+      break;
+
+    case 21:
+      image = C21;
+      break;
+
+    case 22:
+      image = C22;
+      break;
+
     case 23:
       image = C23;
+      break;
+
+    case 24:
+      image = C24;
+      break;
+
+    case 25:
+      image = C25;
+      break;
+
+    case 26:
+      image = C26;
       break;
 
     default:
@@ -110,7 +142,7 @@ function CompanyImage({ companyId, format }) {
   return format === "modal" ? (
     <Image size="large" src={image} wrapped />
   ) : (
-    <Image class="ui large image" src={C5}></Image>
+    <Image class="ui large image" src={image}></Image>
   );
 }
 

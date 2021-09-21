@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import {
   Button,
-  Image,
   Modal,
   Header,
   Select,
@@ -15,11 +14,10 @@ import CompanyImage from "./CompanyImage";
 
 function CompanyModel({ value = [] }) {
   console.log(value);
-  // 1. Renders correct company based on back-end result
+
   // const [markets, setMarkets] = useState([]);
 
   // const [currentMarkets, setCurrentMarkets];
-  // 2. Sets all starting values for company in their appropriate rendering]
 
   const auth = useContext(AuthContext);
 
@@ -48,13 +46,14 @@ function CompanyModel({ value = [] }) {
   //    }
   //    return currentMarket;
   //  };
-  // 3. Buttons have functionality that allow user to "place bet", adds to "portfolio"
 
-  // Validation
-  // User cannot purchase more stocks thatn are allowed (max 100)
-  // User cannot buy more than they can afford
+  const placeBetFor = () => {
+    return;
+  };
 
-  // ToDo: add message for total cost of position based on #stocks * price
+  const placeBetAgainst = () => {
+    return;
+  };
 
   const [open, setOpen] = useState(false);
   const numberOfStocks = [
@@ -80,7 +79,7 @@ function CompanyModel({ value = [] }) {
               <Grid.Column width={8}>
                 <Modal.Content>
                   <CompanyImage
-                    fomrat="modal"
+                    format="modal"
                     companyId={value.company?.companyId}
                   />
                 </Modal.Content>
@@ -88,25 +87,27 @@ function CompanyModel({ value = [] }) {
               <Modal.Content>
                 <Modal.Description>
                   <Label wrapped size="big">
-                    {value.map((market) => (
-                      <>
-                        <Header key={market.marketId}>{market.marketId}</Header>
-                        {/* <p>Dividend per turn: ${market.company.dividend}</p>
-                        <p>Current Price: ${market.price}</p>
-                  
-                        <p>Last Year's Price: </p>
-                        <p>Available Stocks: #{100 - market.stockPurchasedTotal}</p> */}
-                      </>
-                    ))}
+                    <Header key={value.company?.companyId}>
+                      {value.company?.name}
+                    </Header>
+                    <p>Dividend per turn: ${value.company?.dividend}</p>
+                    <p>Current Price: ${value?.price}</p>
+                    {/* Update this to present correct last year price */}
+                    <p>Last Year's Price: ${value?.price}</p>
+                    <p>Available Stocks: #{100 - value?.stockPurchasedTotal}</p>
                   </Label>
-                  <Header>Put a Position on UXGallery?</Header>
+                  <Header>Put a Position on {value.company?.name}?</Header>
                   <div>
                     <Select
                       placeholder="# of Stocks"
                       options={numberOfStocks}
                     ></Select>
-                    <Button color="green">Bet For</Button>
-                    <Button color="red">Bet Against</Button>
+                    <Button onClick={placeBetFor} color="green">
+                      Bet For
+                    </Button>
+                    <Button onClick={placeBetAgainst} color="red">
+                      Bet Against
+                    </Button>
                   </div>
                 </Modal.Description>
 
@@ -139,7 +140,9 @@ function CompanyModel({ value = [] }) {
       }
     >
       <Modal.Header>
-        UXGallery
+        {value.company?.name}
+        <br />
+        <br />
         <Tab panes={panes} />
       </Modal.Header>
     </Modal>

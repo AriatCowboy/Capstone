@@ -2,14 +2,15 @@ import React from "react";
 import { Button, Header, Image, Modal, Table } from "semantic-ui-react";
 
 function PortfolioModal() {
-  // 1. Shows current holdings, #stocks, bought at price, and current value per position
-  // 2. Buttons have functionality that allows user to sell that position, or "bet" more on that position
-  // 3. Buttons have functionality that allow user to "place bet", adds to "portfolio"
-  // 4. Updates current liquidity and current holdings sections
-
-  // ToDo: add Tab for perfromance of portfolio
-
   const [open, setOpen] = React.useState(false);
+
+  const sellAllStocks = () => {
+    return;
+  };
+
+  const buyMoreStocks = () => {
+    return;
+  };
 
   return (
     <Modal
@@ -52,8 +53,14 @@ function PortfolioModal() {
                   <Table.Cell>$50</Table.Cell>
                   <Table.Cell>+$500</Table.Cell>
                   <Table.Cell>
-                    <Button color="black">Buy</Button>
-                    <Button color="green">Sell</Button>
+                    {/* Buys more stocks of the position indicated */}
+                    <Button onClick={buyMoreStocks} color="black">
+                      Buy
+                    </Button>
+                    {/* Sells all stocks in that position */}
+                    <Button onClick={sellAllStocks} color="green">
+                      Sell
+                    </Button>
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
