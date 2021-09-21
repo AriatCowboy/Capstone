@@ -50,6 +50,8 @@ public class GameService {
             Result<Game> gameResult = addGame(game);
             game = gameResult.getPayload();
             game.setMarkets(marketService.startNewGame(game));
+        } else if (game.getYear() == 10) {
+            return game;
         } else {
            game = nextRound(game);
         }
@@ -81,24 +83,68 @@ public class GameService {
             return game;
         }
 
+        if (game.getYear() == 9) {
+            return finalRound(game);
+        }
+
         for (Market m : game.getMarkets()) {
-            if  (m.getMarketId() == 0) {
+            if (m.getMarketId() == 0) {
                 value = m.getStockPurchasedYear() * m.getPrice();
-                game.setScore(game.getScore() - value);
+                if(m.getLongInvestment()) {
+                    game.setScore(game.getScore() - value);
+                } else {
+                    game.setScore(game.getScore() + value);
+                }
                 marketService.addMarket(m);
             }
         }
+
         updateGameState(game);
         game.setYear(game.getYear() + 1);
 
         game.setMarkets(marketService.findByGameId(game.getGameId()));
+
         List<Market> marketList = marketService.generateThisYearMarket(game.getYear(), game.getGameId());
         List<Market> gameMarketList = game.getMarkets();
         gameMarketList.addAll(marketList);
         game.setMarkets(gameMarketList);
 
 
+        return game;
+    }
 
+    public Game finalRound(Game game) {
+        int value = 0;
+        for (Market m : game.getMarkets()) {
+            if (m.getMarketId() == 0) {
+                m.setStockPurchasedYear(0 - m.getStockPurchasedTotal());
+                value = m.getStockPurchasedYear() * m.getPrice();
+                if(m.getLongInvestment()) {
+                    game.setScore(game.getScore() - value);
+                } else {
+                    game.setScore(game.getScore() + value);
+                }
+                marketService.addMarket(m);
+            }
+        }
+
+        updateGameState(game);
+        game.setYear(game.getYear() + 1);
+        game.setMarkets(marketService.findByGameId(game.getGameId()));
+
+        for (Market m : game.getMarkets()) {
+            if (m.getYearNumber() == 9) {
+                Market market = new Market();
+                market = m;
+                market.setYearNumber(10);
+                market.setMarketId(0);
+                market.setStockPurchasedYear(0);
+                market.setStockPurchasedTotal(0);
+                marketService.addMarket(market);
+            }
+        }
+        game.setMarkets(marketService.findByGameId(game.getGameId()));
+        updateGameState(game);
         return game;
     }
 
@@ -148,7 +194,7 @@ public class GameService {
             result.addMessage("User Id cannot be less than 0.", ResultType.INVALID);
             return result;
         }
-        if (game.getYear() <= 0){
+        if (game.getYear() < 0){
             result.addMessage("Turn/LastYear cannot be less than 0.", ResultType.INVALID);
             return result;
         }

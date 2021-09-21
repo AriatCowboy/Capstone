@@ -63,11 +63,11 @@ public class MarketService {
             return new ArrayList<>();
         }
 
-        List<Market> marketList = findPortfolio(gameId, currentYear - 1);
-
+        List<Market> marketListTemp = findPortfolio(gameId, currentYear - 1);
+        List<Market> marketList = new ArrayList<>();
         int newlyBankruptCompanies = 0;
 
-        for (Market m : marketList) {
+        for (Market m : marketListTemp) {
             m.setYearNumber(m.getYearNumber() + 1);
 
             int roll = generateRandom(1, 20);
@@ -79,16 +79,18 @@ public class MarketService {
             } else {
                 modifier = marketType.getPayload().getBearModify();
             }
-
+            m.setLastYearPrice(m.getPrice());
             m.setPrice(m.getPrice() + modifier);
             m.setStockPurchasedYear(0);
             m.setMarketId(0);
 
             if (m.getPrice() <= 0 && !m.getBankrupt()) {
-                m.setPrice(0);
-                m.setBankrupt(true);
-                setBankrupt(m);
+//                m.setPrice(0);
+//                m.setBankrupt(true);
+//                setBankrupt(m);]
                 newlyBankruptCompanies++;
+            } else {
+                marketList.add(m);
             }
         }
 
@@ -156,6 +158,7 @@ public class MarketService {
             if (instances == 0) {
                 Company company = companyService.findById(rand).getPayload();
                 Market newMarket = new Market(company, 25, yearNum, 0, gameId, 0, 0, false, false);
+                newMarket.setLastYearPrice(newMarket.getPrice());
                 marketList.add(newMarket);
                 keepGoing = false;
             }
