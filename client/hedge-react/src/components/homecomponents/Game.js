@@ -15,11 +15,10 @@ function Game() {
 
   const getCurrentMarkets = (game) => {
     const currentMarkets = [];
-
     for (let i = 0; i < game.markets.length; i++) {
       if (
         !game.markets[i].isBankrupt &&
-        game.markets[i].yearNumber === game.lastYear
+        game.markets[i].yearNumber === game.year
       ) {
         currentMarkets.push(game.markets[i]);
       }
@@ -28,6 +27,7 @@ function Game() {
   };
 
   const getGame = () => {
+    console.log('hey')
     const init = {
       headers: {
         "Access-Control-Allow-Origin": "http://localhost:3000",
@@ -38,34 +38,46 @@ function Game() {
     return fetch("http://localhost:8080/api/game", init)
       .then((response) => response.json())
       .then((data) => {
-        const currentMarkets = getCurrentMarkets(data);
-        setGame(data);
-        setMarkets(currentMarkets);
-      })
+        setGame(data)
+        console.log(game)
+        const currentMarkets = getCurrentMarkets(data)
+        setMarkets(currentMarkets)
 
+      })
       .catch((error) => console.log("Error", error));
   };
 
   useEffect(getGame, [auth.user]);
 
   // Goes to next year - Add Market
-  const handleNextYear = (event) => {
-    event.preventDefault();
+  const handleNextYear = () => {
+    console.log(markets)
+    let gameHold = game
+    gameHold.markets = markets
+    setGame(gameHold)
+    console.log(game)
 
     const init = {
       method: "POST",
       headers: {
         "Access-Control-Allow-Origin": "http://localhost:3000",
         Authorization: `Bearer ${auth.user.token}`,
+        "Content-Type": "application/json"
       },
+      body: JSON.stringify(game)
     };
 
     fetch("http://localhost:8080/api/game", init)
       .then((response) => {
-        if (response.status === 400 || response.status === 201) {
+        if (response.status === 200) {
           return response.json();
         }
-        return Promise.reject("Something went wrong :)");
+        return Promise.reject("Something else went wrong, sorry :)");
+      })
+      .then((data) => {
+        setGame(data)
+        const currentMarkets = getCurrentMarkets(data)
+        setMarkets(currentMarkets)
       })
       .catch((error) => console.log("Error:", error));
   };
@@ -150,10 +162,15 @@ function Game() {
         <Grid.Column textAlign="center" width={8}>
           <Grid.Row>
             <PortfolioModal />
-            <Button onClick={handleNextYear} size="massive" color="yellow">
-              Next Year
-            </Button>
-            <QuitGame />
+            {game.year !== 10 ? (
+              <>
+                <Button onClick={handleNextYear} size="massive" color="yellow">
+                  Next Year
+                </Button>
+                <QuitGame />
+              </>
+            ) : null}
+
           </Grid.Row>
         </Grid.Column>
 
@@ -161,7 +178,7 @@ function Game() {
           <Grid.Row>
             <Label size="massive" width={9}>
               {/* increment by 1 when progressToNextYear is clicked*/}
-              <Header>Year 1 / 10</Header>
+              <Header>Year {game.year} / 10</Header>
             </Label>
           </Grid.Row>
         </Grid.Column>
@@ -170,7 +187,7 @@ function Game() {
           <Grid.Row>
             <Label size="massive" width={9}>
               {/* set equal to liquidity + currentholdings*/}
-              <Header>Score $XXX,XXX</Header>
+              <Header>Score {game.score}</Header>
             </Label>
           </Grid.Row>
         </Grid.Column>
