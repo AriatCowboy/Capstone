@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -20,7 +20,6 @@ function CompanyModel({ value = [] }) {
   // const [currentMarkets, setCurrentMarkets];
 
   const auth = useContext(AuthContext);
-
   //  const getMarkets = () => {
   //    const init = {
   //      headers: {
@@ -50,13 +49,14 @@ function CompanyModel({ value = [] }) {
   const placeBetFor = () => {
     value.stockPurchasedYear = stockAmount
     value.longInvestment = true
-
+    setOpen(false)
     return;
   };
 
   const placeBetAgainst = () => {
     value.stockPurchasedYear = stockAmount
     value.longInvestment = false
+    setOpen(false)
     return;
   };
 
@@ -104,7 +104,7 @@ function CompanyModel({ value = [] }) {
                     <p>Current Price: ${value?.price}</p>
                     {/* Update this to present correct last year price */}
                     <p>Last Year's Price: ${value?.lastYearPrice}</p>
-                    <p>Available Stocks: #{100 - value?.stockPurchasedTotal}</p>
+                    <p>Available Stocks: #{100 - value?.stockPurchasedTotal - stockAmount}</p>
                   </Label>
                   {value.yearNumber !== 10 ? (
                     <Header>Put a Position on {value.company?.name}?</Header>
@@ -114,12 +114,27 @@ function CompanyModel({ value = [] }) {
                     (
                       <div>
                         <input id="edit-stock-amount" name="stockAmount" value={stockAmount} onChange={handleStockAmountChange} type="number"></input>
-                        <Button onClick={placeBetFor} color="green">
-                          Bet For
-                        </Button>
-                        <Button onClick={placeBetAgainst} color="red">
-                          Bet Against
-                        </Button>
+                        {stockAmount >= 0 ?
+                          (
+                            <>
+                              <Button onClick={placeBetFor} color="green">
+                                Bet For
+                              </Button>
+                              <Button onClick={placeBetAgainst} color="red">
+                                Bet Against
+                              </Button>
+                            </>
+                          ) :
+                          <>
+                            <Button onClick={placeBetFor} color="green">
+                              Sell For
+                            </Button>
+                            <Button onClick={placeBetAgainst} color="red">
+                              Sell Against
+                            </Button>
+                          </>
+                        }
+
                       </div>
                     ) : null
                   }
@@ -127,9 +142,16 @@ function CompanyModel({ value = [] }) {
                     (
                       <div>
                         <input id="edit-stock-amount" name="stockAmount" value={stockAmount} onChange={handleStockAmountChange} type="number"></input>
-                        <Button onClick={placeBetFor} color="green">
-                          Bet For
-                        </Button>
+                        {stockAmount >= 0 ?
+                          (
+                            <Button onClick={placeBetFor} color="green">
+                              Bet For
+                            </Button>
+                          ) :
+                          <Button onClick={placeBetFor} color="green">
+                            Sell For
+                          </Button>
+                        }
                       </div>
                     ) : null
                   }
@@ -137,9 +159,17 @@ function CompanyModel({ value = [] }) {
                     (
                       <div>
                         <input id="edit-stock-amount" name="stockAmount" value={stockAmount} onChange={handleStockAmountChange} type="number"></input>
-                        <Button onClick={placeBetAgainst} color="red">
-                          Bet Against
-                        </Button>
+                        {stockAmount >= 0 ?
+                          (
+                            <Button onClick={placeBetAgainst} color="red">
+                              Bet Against
+                            </Button>
+                          ) :
+                          <Button onClick={placeBetAgainst} color="red">
+                            Sell Against
+                          </Button>
+                        }
+
                       </div>
                     ) : null
                   }
