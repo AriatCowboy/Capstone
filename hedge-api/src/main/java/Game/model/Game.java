@@ -1,8 +1,5 @@
 package Game.model;
 
-import Game.domain.ResultType;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
@@ -11,7 +8,6 @@ public class Game {
     int year;
     int score;
     List<Market> markets;
-    ArrayList<String> messages = new ArrayList<>();
 
     public Game() {
     }
@@ -63,18 +59,5 @@ public class Game {
     public void setMarkets(List<Market> markets) {
         this.markets = markets;
     }
-
-    public List<String> getMessages() {
-        return new ArrayList<>(messages);
-    }
-
-    public void addMessage(String message) {
-        messages.add(message);
-    }
-
-    public void setMessages(ArrayList<String> messages) {
-        this.messages = messages;
-    }
-
 }
 

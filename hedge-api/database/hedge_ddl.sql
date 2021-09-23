@@ -63,4 +63,16 @@ CREATE TABLE IF NOT EXISTS `hedge`.`market_type` (
     FOREIGN KEY (`company_id`)
     REFERENCES `hedge`.`company` (`company_id`));
     
-
+CREATE TABLE IF NOT EXISTS `hedge`.`graph_data` (
+  `graph_data_id` INT NOT NULL AUTO_INCREMENT,
+  `game_id` INT NOT NULL,
+  `company_id` INT NOT NULL,
+  `purchased_price` INT NOT NULL,
+  `amount_purchased` INT NOT NULL,
+  `year` INT NOT NULL,
+  `current_price` INT NOT NULL,
+   PRIMARY KEY (`graph_data_id`),
+  INDEX `fk_company_id_idx` (`company_id` ASC) VISIBLE,
+    FOREIGN KEY (`company_id`)
+    REFERENCES `hedge`.`company` (`company_id`));
+    

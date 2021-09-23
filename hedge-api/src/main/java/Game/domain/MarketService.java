@@ -17,11 +17,13 @@ public class MarketService {
     private final MarketRepository repository;
     private final MarketTypeService marketTypeService;
     private final CompanyService companyService;
+    private final GraphDataService graphDataService;
 
-    public MarketService(MarketRepository repository, MarketTypeService marketTypeService, CompanyService companyService) {
+    public MarketService(MarketRepository repository, MarketTypeService marketTypeService, CompanyService companyService, GraphDataService graphDataService) {
         this.repository = repository;
         this.marketTypeService = marketTypeService;
         this.companyService = companyService;
+        this.graphDataService = graphDataService;
     }
 
     public List<Market> findByGameId(int gameId) {
@@ -52,7 +54,7 @@ public class MarketService {
         List<Market> marketList = new ArrayList<>();
 
         while (marketList.size() != 10) {
-            marketList = addCompanyToMarket(marketList, game.getYear() + 1, game.getGameId());
+            marketList = addCompanyToMarket(marketList, game.getYear(), game.getGameId());
         }
 
         return marketList;
@@ -83,7 +85,12 @@ public class MarketService {
             m.setPrice(m.getPrice() + modifier);
             m.setStockPurchasedYear(0);
             m.setMarketId(0);
-
+            List<Market> markets = repository.findByCompanyId(m.getCompany().getCompanyId(), m.getGameId());
+            for (Market x : markets){
+                if (m.getYearNumber() - 1 == x.getYearNumber()){
+                    graphDataService.updateCurrentPrice(m.getGameId(), m.getPrice(), m.getCompany().getCompanyId());
+                }
+            }
             if (m.getPrice() <= 0 && !m.getBankrupt()) {
 //                m.setPrice(0);
 //                m.setBankrupt(true);
@@ -120,6 +127,14 @@ public class MarketService {
         if(!repository.addMarket(market)) {
             result.addMessage("There was in internal error.", ResultType.INVALID);
             return result;
+        }
+        if (market.getStockPurchasedYear() > 0){
+            int gameId = market.getGameId();
+            int amountPurchased = market.getStockPurchasedYear();
+            int price = market.getPrice();
+            int year = market.getYearNumber();
+            int companyId = market.getCompany().getCompanyId();
+            graphDataService.addGraphData(0, gameId, companyId, price, amountPurchased, year);
         }
 
         result.setPayload(market);

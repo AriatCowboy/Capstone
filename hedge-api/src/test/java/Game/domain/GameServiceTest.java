@@ -43,56 +43,56 @@ class GameServiceTest {
 //        assertNull(game);
 //    }
 
-    @Test
-    void addGame() {
-        Game game = new Game(2, 2, 9);
-        Result<Game> gameResult = service.addGame(game);
-        assertTrue(gameResult.isSuccess());
-    }
+//    @Test
+//    void addGame() {
+//        Game game = new Game(2, 2, 9);
+//        Result<Game> gameResult = service.addGame(game);
+//        assertTrue(gameResult.isSuccess());
+//    }
+//
+//    @Test
+//    void shouldNotAddGame() {
+//        Game game = new Game(0, 2, 0);
+//        Result<Game> gameResult = service.addGame(game);
+//        assertTrue(gameResult.getMessages().size() > 0);
+//
+//        game = new Game(2, 2, 0);
+//        gameResult = service.addGame(game);
+//        assertTrue(gameResult.getMessages().size() > 0);
+//
+//        game = new Game(2, 0, 3);
+//        gameResult = service.addGame(game);
+//        assertTrue(gameResult.getMessages().size() > 0);
+//    }
+//
+//    @Test
+//    void updateGameState() {
+//        Game game = new Game(1, 1, 9);
+//        Result<Boolean> gameResult = service.updateGameState(game);
+//        assertTrue(gameResult.isSuccess());
+//        game = service.findGameById(1);
+//        assertEquals(9, game.getLastYear());
+//    }
 
-    @Test
-    void shouldNotAddGame() {
-        Game game = new Game(0, 2, 0);
-        Result<Game> gameResult = service.addGame(game);
-        assertTrue(gameResult.getMessages().size() > 0);
+//    @Test
+//    void shouldNotUpdateGameState() {
+//        Game game = new Game(0, 1, 9);
+//        Result<Boolean> gameResult = service.updateGameState(game);
+//        assertTrue(gameResult.getMessages().size() > 0);
+//
+//        game = new Game(1, 0, 9);
+//        gameResult = service.updateGameState(game);
+//        assertTrue(gameResult.getMessages().size() > 0);
+//
+//        game = new Game(1, 1, 0);
+//        gameResult = service.updateGameState(game);
+//        assertTrue(gameResult.getMessages().size() > 0);
+//    }
 
-        game = new Game(2, 2, 0);
-        gameResult = service.addGame(game);
-        assertTrue(gameResult.getMessages().size() > 0);
-
-        game = new Game(2, 0, 3);
-        gameResult = service.addGame(game);
-        assertTrue(gameResult.getMessages().size() > 0);
-    }
-
-    @Test
-    void updateGameState() {
-        Game game = new Game(1, 1, 9);
-        Result<Boolean> gameResult = service.updateGameState(game);
-        assertTrue(gameResult.isSuccess());
-        game = service.findGameById(1);
-        assertEquals(9, game.getLastYear());
-    }
-
-    @Test
-    void shouldNotUpdateGameState() {
-        Game game = new Game(0, 1, 9);
-        Result<Boolean> gameResult = service.updateGameState(game);
-        assertTrue(gameResult.getMessages().size() > 0);
-
-        game = new Game(1, 0, 9);
-        gameResult = service.updateGameState(game);
-        assertTrue(gameResult.getMessages().size() > 0);
-
-        game = new Game(1, 1, 0);
-        gameResult = service.updateGameState(game);
-        assertTrue(gameResult.getMessages().size() > 0);
-    }
-
-    @Test
-    void deleteGame() {
-        boolean result = service.deleteGame(1);
-        Game game = service.findGameById(1);
-        assertEquals(false, game);
-    }
+//    @Test
+//    void deleteGame() {
+//        boolean result = service.deleteGame(1);
+//        Game game = service.findGameById(1);
+//        assertEquals(false, game);
+//    }
 }
