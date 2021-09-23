@@ -1,9 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import {
   Button,
   Modal,
   Header,
-  Select,
   Tab,
   Label,
   Grid,
@@ -13,6 +12,7 @@ import AuthContext from "../../AuthContext";
 import CompanyImage from "./CompanyImage";
 
 function CompanyModel({ value = [] }) {
+  // , update, id, m }) {
   const [stockAmount, setStockAmount] = useState(0);
 
   // const [markets, setMarkets] = useState([]);
@@ -20,59 +20,32 @@ function CompanyModel({ value = [] }) {
   // const [currentMarkets, setCurrentMarkets];
 
   const auth = useContext(AuthContext);
-  //  const getMarkets = () => {
-  //    const init = {
-  //      headers: {
-  //        "Access-Control-Allow-Origin": "http://localhost:3000",
-  //        Authorization: `Bearer ${auth.user.token}`,
-  //      },
-  //    };
 
-  //    return fetch("http://localhost:8080/api/market", init)
-  //      .then((response) => response.json())
-  //      .then((data) => setMarkets(data))
-  //      .catch((error) => console.log("Error", error));
-  //  };
+  // const updateList = (arr, changes) => {
+  //   for(let k in changes) {
+  //     arr[k] = changes[k];
+  //   }
+  // };
 
-  //  const currentMarkets = (getMarkets) => {
-  //    for (let i = 0; i < getMarkets.size(); i++) {
-  //      if (
-  //        !getMarkets[i].isBankrupt &&
-  //        getMarkets[i].yearNumber === Game.lastYear
-  //      ) {
-  //        currentMarket.push(getMarkets[i]);
-  //      }
-  //    }
-  //    return currentMarket;
-  //  };
 
   const placeBetFor = () => {
     value.stockPurchasedYear = stockAmount
     value.longInvestment = true
-    setOpen(false)
+    // updateList(m[id], value.isBankrupt, value.company, value.gameId, value.lastYearPrice, value.longInvestment, value.marketId, value.price, (value.stockPurchasedTotal + value.stockPurchasedYear), stockAmount, value.yearNumber)
+    // console.log(m)
+    // return update(m);
     return;
   };
 
   const placeBetAgainst = () => {
     value.stockPurchasedYear = stockAmount
     value.longInvestment = false
-    setOpen(false)
+    // updateList(m[id], value.isBankrupt, value.company, value.gameId, value.lastYearPrice, value.longInvestment, value.marketId, value.price, (value.stockPurchasedTotal + value.stockPurchasedYear), stockAmount, value.yearNumber)
+    // return update(m);
     return;
   };
 
   const [open, setOpen] = useState(false);
-  const numberOfStocks = [
-    { key: 10, value: 10, text: "10" },
-    { key: 20, value: 20, text: "20" },
-    { key: 30, value: 30, text: "30" },
-    { key: 40, value: 40, text: "40" },
-    { key: 50, value: 50, text: "50" },
-    { key: 60, value: 60, text: "60" },
-    { key: 70, value: 70, text: "70" },
-    { key: 80, value: 80, text: "80" },
-    { key: 90, value: 90, text: "90" },
-    { key: 100, value: 100, text: "100" },
-  ];
 
   const handleStockAmountChange = (event) => {
     setStockAmount(event.target.valueAsNumber);
@@ -104,7 +77,7 @@ function CompanyModel({ value = [] }) {
                     <p>Current Price: ${value?.price}</p>
                     {/* Update this to present correct last year price */}
                     <p>Last Year's Price: ${value?.lastYearPrice}</p>
-                    <p>Available Stocks: #{100 - value?.stockPurchasedTotal - stockAmount}</p>
+                    <p>Available Stocks: #{100 - value?.stockPurchasedTotal}</p>
                   </Label>
                   {value.yearNumber !== 10 ? (
                     <Header>Put a Position on {value.company?.name}?</Header>
@@ -114,27 +87,12 @@ function CompanyModel({ value = [] }) {
                     (
                       <div>
                         <input id="edit-stock-amount" name="stockAmount" value={stockAmount} onChange={handleStockAmountChange} type="number"></input>
-                        {stockAmount >= 0 ?
-                          (
-                            <>
-                              <Button onClick={placeBetFor} color="green">
-                                Bet For
-                              </Button>
-                              <Button onClick={placeBetAgainst} color="red">
-                                Bet Against
-                              </Button>
-                            </>
-                          ) :
-                          <>
-                            <Button onClick={placeBetFor} color="green">
-                              Sell For
-                            </Button>
-                            <Button onClick={placeBetAgainst} color="red">
-                              Sell Against
-                            </Button>
-                          </>
-                        }
-
+                        <Button onClick={placeBetFor} color="green">
+                          Bet For
+                        </Button>
+                        <Button onClick={placeBetAgainst} color="red">
+                          Bet Against
+                        </Button>
                       </div>
                     ) : null
                   }
@@ -142,16 +100,9 @@ function CompanyModel({ value = [] }) {
                     (
                       <div>
                         <input id="edit-stock-amount" name="stockAmount" value={stockAmount} onChange={handleStockAmountChange} type="number"></input>
-                        {stockAmount >= 0 ?
-                          (
-                            <Button onClick={placeBetFor} color="green">
-                              Bet For
-                            </Button>
-                          ) :
-                          <Button onClick={placeBetFor} color="green">
-                            Sell For
-                          </Button>
-                        }
+                        <Button onClick={placeBetFor} color="green">
+                          Bet For
+                        </Button>
                       </div>
                     ) : null
                   }
@@ -159,17 +110,9 @@ function CompanyModel({ value = [] }) {
                     (
                       <div>
                         <input id="edit-stock-amount" name="stockAmount" value={stockAmount} onChange={handleStockAmountChange} type="number"></input>
-                        {stockAmount >= 0 ?
-                          (
-                            <Button onClick={placeBetAgainst} color="red">
-                              Bet Against
-                            </Button>
-                          ) :
-                          <Button onClick={placeBetAgainst} color="red">
-                            Sell Against
-                          </Button>
-                        }
-
+                        <Button onClick={placeBetAgainst} color="red">
+                          Bet Against
+                        </Button>
                       </div>
                     ) : null
                   }

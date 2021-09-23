@@ -1,16 +1,41 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Button, Header, Image, Modal, Table } from "semantic-ui-react";
 
-function PortfolioModal() {
-  const [open, setOpen] = React.useState(false);
+import AuthContext from "../../AuthContext";
 
+function PortfolioModal({ score, current }) {
+  const [open, setOpen] = useState(false);
+  const [graphdata, setGraphData] = useState([]);
+
+
+  const auth = useContext(AuthContext);
   const sellAllStocks = () => {
     return;
   };
+  const getStockValue = () => {
+    let stockValue = 0
+    for (let i = 0; i < current.length; i++) {
+      stockValue = stockValue + (current[i].price * current[i].stockPurchasedTotal)
+    }
+    return stockValue;
+  }
 
-  const buyMoreStocks = () => {
-    return;
-  };
+   const getMarkets = () => {
+     const init = {
+       headers: {
+         "Access-Control-Allow-Origin": "http://localhost:3000",
+         Authorization: `Bearer ${auth.user.token}`,
+       },
+     };
+
+    fetch(`http://localhost:8080/api/graphdata`, init)
+       .then((response) => response.json())
+       .then((data) => setGraphData(data))
+       .catch((error) => console.log("Error", error));
+   };
+
+   useEffect(getMarkets, [auth.user, score, current]);
+
 
   return (
     <Modal
@@ -31,8 +56,8 @@ function PortfolioModal() {
           wrapped
         />
         <Modal.Description>
-          <Header>Current Liquidity: $XXX,XXX</Header>
-          <Header>Current Holdings Value: $XXX,XXX</Header>
+          <Header>Current Liquidity: $ {score}</Header>
+          <Header>Current Holdings Value: $ {getStockValue()}</Header>
           <p>Your Current Positions:</p>
           <div>
             <Table>
@@ -45,24 +70,20 @@ function PortfolioModal() {
                   <Table.HeaderCell>Action</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
-
               <Table.Body>
-                <Table.Row>
-                  <Table.Cell>UXGallery</Table.Cell>
-                  <Table.Cell>100</Table.Cell>
-                  <Table.Cell>$50</Table.Cell>
-                  <Table.Cell>+$500</Table.Cell>
-                  <Table.Cell>
-                    {/* Buys more stocks of the position indicated */}
-                    <Button onClick={buyMoreStocks} color="black">
-                      Buy
-                    </Button>
-                    {/* Sells all stocks in that position */}
-                    <Button onClick={sellAllStocks} color="green">
-                      Sell
-                    </Button>
-                  </Table.Cell>
-                </Table.Row>
+                {graphdata.map((gd) => (
+                  <Table.Row key={gd.graphDataId}>
+                    <Table.Cell>{gd.companyId}</Table.Cell>
+                    <Table.Cell>{gd.amountPurchased}</Table.Cell>
+                    <Table.Cell>{gd.purchasedPrice}</Table.Cell>
+                    <Table.Cell>{gd.currentPrice}</Table.Cell>
+                    <Table.Cell>
+                      <Button onClick={sellAllStocks} color="green">
+                        Sell
+                      </Button>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
               </Table.Body>
             </Table>
           </div>

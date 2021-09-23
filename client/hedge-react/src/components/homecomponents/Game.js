@@ -1,20 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Button, Grid, Label, Header } from "semantic-ui-react";
-import { useHistory } from "react-router-dom";
 
 import AuthContext from "../../AuthContext";
 import PortfolioModal from "../gamecomponents/PortfolioModal";
 import QuitGame from "../gamecomponents/QuitGameModal";
-import Errors from "../hiddencomponents/Errors";
 import CompanyModal from "../gamecomponents/CompanyModal";
-import Leaderboard from "../infocomponents/Leaderboard";
 
 function Game() {
-  const [game, setGame] = useState({});
+  const [game, setGame] = useState(null);
   const [markets, setMarkets] = useState([]);
-  const [errorList, setErrorList] = useState([null]);
-
-  const history = useHistory();
   const auth = useContext(AuthContext);
 
   const getCurrentMarkets = (game) => {
@@ -31,7 +25,6 @@ function Game() {
   };
 
   const getGame = () => {
-
     const init = {
       headers: {
         "Access-Control-Allow-Origin": "http://localhost:3000",
@@ -42,11 +35,10 @@ function Game() {
     return fetch("http://localhost:8080/api/game", init)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data)
         setGame(data)
-        setErrorList(data.messages)
         const currentMarkets = getCurrentMarkets(data)
         setMarkets(currentMarkets)
+
       })
       .catch((error) => console.log("Error", error));
   };
@@ -78,80 +70,21 @@ function Game() {
       })
       .then((data) => {
         setGame(data)
-        setErrorList(data.messages)
-        console.log(game)
         const currentMarkets = getCurrentMarkets(data)
         setMarkets(currentMarkets)
       })
       .catch((error) => console.log("Error:", error));
   };
 
-  const deleteGame = () => {
+  // const update = (market) => {
+  //   let currentMarkets = markets
+  //   if (currentMarkets !== market){
+  //     setMarkets(currentMarkets)
+  //   }
+  // };
+  // useEffect(update, [auth.user]);
 
-    const init = {
-      method: "DELETE",
-      headers: {
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        Authorization: `Bearer ${auth.user.token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(game)
-    };
-
-    fetch("http://localhost:8080/api/game", init)
-      .then((response) => {
-        if (response.status === 204) {
-          return null;
-        }
-        return Promise.reject("Something else went wrong, sorry :)");
-      })
-      .catch((error) => console.log("Error:", error));
-  };
-
-
-  const goToLeaderBoard = () => {
-
-    const init = {
-      method: "POST",
-      headers: {
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        Authorization: `Bearer ${auth.user.token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(game.score)
-    };
-
-    fetch("http://localhost:8080/api/leaderboard/addscore", init)
-      .then((response) => {
-        if (response.status === 201) {
-          return response.json();
-        }
-        return Promise.reject("Something else went wrong, sorry :)");
-      })
-      .then(() => {
-        deleteGame();
-        history.push('/info/leaderboard');
-      })
-      .catch((error) => console.log("Error:", error));
-  };
-
-
-
-
-
-  //  const getMarkets = () => {
-  //    const init = {
-  //      headers: {
-  //        "Access-Control-Allow-Origin": "http://localhost:3000",
-  //        Authorization: `Bearer ${auth.user.token}`,
-  //      },
-  //    };
-
-  //    return fetch("http://localhost:8080/api/market", init)
-  //      .then((response) => response.json())
-  //      .then((data) => setMarkets(data))
-  //      .catch((error) => console.log("Error", error));
-  //  };
+  // useEffect(update, [auth.user, markets]);
 
   //  1. Calls new game (GETMAPPING from GAME Controller)
   //  2. Sets random 10 companies to "company slots" in the grid using their id
@@ -163,10 +96,9 @@ function Game() {
   // Validation
   // User is valid
   // Checks the correct user is playing the game
-
   if (markets.length === 0) {
     return null;
-  }
+  };
 
   return (
     <>
@@ -174,78 +106,71 @@ function Game() {
         <h1 id="header">The Market</h1>
       </div>
       <br />
-      {errorList !== null && errorList?.length > 0 ?
-        (
-          <div>
-            {errorList.map(error => (
-              <p>
-                {error}
-                </p>
-
-            ))}</div>
-        )
-        : null
-      }
       <Grid textAlign="center">
         <Grid.Row>
           <Grid.Column width={3}>
-            <CompanyModal value={markets[0]} />
+            <CompanyModal value={markets[0]} /> 
+            {/* update={update} id={0} m={markets}/> */}
           </Grid.Column>
           <Grid.Column width={3}>
-            <CompanyModal value={markets[1]} />
+            <CompanyModal value={markets[1]} /> 
+            {/* update={update} id={0} m={markets}/> */}
           </Grid.Column>
           <Grid.Column width={3}>
-            <CompanyModal value={markets[2]} />
+            <CompanyModal value={markets[2]} /> 
+            {/* update={update} id={0} m={markets}/> */}
           </Grid.Column>
           <Grid.Column width={3}>
-            <CompanyModal value={markets[3]} />
+            <CompanyModal value={markets[3]} /> 
+            {/* update={update} id={0} m={markets}/> */}
           </Grid.Column>
           <Grid.Column width={3}>
-            <CompanyModal value={markets[4]} />
+            <CompanyModal value={markets[4]} /> 
+            {/* update={update} id={0} m={markets}/> */}
           </Grid.Column>
         </Grid.Row>
 
         <Grid.Row>
           <Grid.Column width={3}>
-            <CompanyModal value={markets[5]} />
+            <CompanyModal value={markets[5]} /> 
+            {/* update={update} id={0} m={markets}/> */}
           </Grid.Column>
           <Grid.Column width={3}>
-            <CompanyModal value={markets[6]} />
+            <CompanyModal value={markets[6]} /> 
+            {/* update={update} id={0} m={markets}/> */}
           </Grid.Column>
           <Grid.Column width={3}>
-            <CompanyModal value={markets[7]} />
+            <CompanyModal value={markets[7]} /> 
+            {/* update={update} id={0} m={markets}/> */}
           </Grid.Column>
           <Grid.Column width={3}>
-            <CompanyModal value={markets[8]} />
+            <CompanyModal value={markets[8]} /> 
+            {/* update={update} id={0} m={markets}/> */}
           </Grid.Column>
           <Grid.Column width={3}>
-            <CompanyModal value={markets[9]} />
+            <CompanyModal value={markets[9]} /> 
+            {/* update={update} id={0} m={markets}/> */}
           </Grid.Column>
         </Grid.Row>
       </Grid>
       <br />
       <br />
       <br />
-
       <Grid columns={3}>
         <Grid.Column textAlign="center" width={8}>
           <Grid.Row>
-            <PortfolioModal />
             {game.year !== 10 ? (
               <>
+                <PortfolioModal game={game} score={game.score} current={markets} />
                 <Button onClick={handleNextYear} size="massive" color="yellow">
                   Next Year
                 </Button>
                 <QuitGame />
               </>
-            ) :
-              <Button onClick={goToLeaderBoard} size="massive" color="yellow">
-                Add to Leaderboard
-              </Button>
-            }
+            ) : null}
+
           </Grid.Row>
         </Grid.Column>
-
         <Grid.Column textAlign="right" width={4}>
           <Grid.Row>
             <Label size="massive" width={9}>
