@@ -1,16 +1,20 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Button, Grid, Label, Header } from "semantic-ui-react";
+import { useHistory } from "react-router-dom";
 
 import AuthContext from "../../AuthContext";
 import PortfolioModal from "../gamecomponents/PortfolioModal";
 import QuitGame from "../gamecomponents/QuitGameModal";
 import Errors from "../hiddencomponents/Errors";
 import CompanyModal from "../gamecomponents/CompanyModal";
+import Leaderboard from "../infocomponents/Leaderboard";
 
 function Game() {
-  const [game, setGame] = useState(null);
+  const [game, setGame] = useState({});
   const [markets, setMarkets] = useState([]);
+  const [errorList, setErrorList] = useState([null]);
 
+  const history = useHistory();
   const auth = useContext(AuthContext);
 
   const getCurrentMarkets = (game) => {
@@ -27,7 +31,7 @@ function Game() {
   };
 
   const getGame = () => {
-    console.log('hey')
+
     const init = {
       headers: {
         "Access-Control-Allow-Origin": "http://localhost:3000",
@@ -38,11 +42,11 @@ function Game() {
     return fetch("http://localhost:8080/api/game", init)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data)
         setGame(data)
-        console.log(game)
+        setErrorList(data.messages)
         const currentMarkets = getCurrentMarkets(data)
         setMarkets(currentMarkets)
-
       })
       .catch((error) => console.log("Error", error));
   };
@@ -51,11 +55,9 @@ function Game() {
 
   // Goes to next year - Add Market
   const handleNextYear = () => {
-    console.log(markets)
     let gameHold = game
     gameHold.markets = markets
     setGame(gameHold)
-    console.log(game)
 
     const init = {
       method: "POST",
@@ -76,11 +78,66 @@ function Game() {
       })
       .then((data) => {
         setGame(data)
+        setErrorList(data.messages)
+        console.log(game)
         const currentMarkets = getCurrentMarkets(data)
         setMarkets(currentMarkets)
       })
       .catch((error) => console.log("Error:", error));
   };
+
+  const deleteGame = () => {
+
+    const init = {
+      method: "DELETE",
+      headers: {
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        Authorization: `Bearer ${auth.user.token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(game)
+    };
+
+    fetch("http://localhost:8080/api/game", init)
+      .then((response) => {
+        if (response.status === 204) {
+          return null;
+        }
+        return Promise.reject("Something else went wrong, sorry :)");
+      })
+      .catch((error) => console.log("Error:", error));
+  };
+
+
+  const goToLeaderBoard = () => {
+
+    const init = {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        Authorization: `Bearer ${auth.user.token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(game.score)
+    };
+
+    fetch("http://localhost:8080/api/leaderboard/addscore", init)
+      .then((response) => {
+        if (response.status === 201) {
+          return response.json();
+        }
+        return Promise.reject("Something else went wrong, sorry :)");
+      })
+      .then(() => {
+        deleteGame();
+        history.push('/info/leaderboard');
+      })
+      .catch((error) => console.log("Error:", error));
+  };
+
+
+
+
 
   //  const getMarkets = () => {
   //    const init = {
@@ -117,6 +174,18 @@ function Game() {
         <h1 id="header">The Market</h1>
       </div>
       <br />
+      {errorList !== null && errorList?.length > 0 ?
+        (
+          <div>
+            {errorList.map(error => (
+              <p>
+                {error}
+                </p>
+
+            ))}</div>
+        )
+        : null
+      }
       <Grid textAlign="center">
         <Grid.Row>
           <Grid.Column width={3}>
@@ -169,8 +238,11 @@ function Game() {
                 </Button>
                 <QuitGame />
               </>
-            ) : null}
-
+            ) :
+              <Button onClick={goToLeaderBoard} size="massive" color="yellow">
+                Add to Leaderboard
+              </Button>
+            }
           </Grid.Row>
         </Grid.Column>
 
