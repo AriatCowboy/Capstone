@@ -6,6 +6,7 @@ import Game.model.Market;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.error.Mark;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,6 +30,7 @@ public class GameService {
         }
         return game;
     }
+
     public Game findGameByUserID (String userId){
         if (userId == null) {
             return null;
@@ -50,10 +52,26 @@ public class GameService {
             Result<Game> gameResult = addGame(game);
             game = gameResult.getPayload();
             game.setMarkets(marketService.startNewGame(game));
+            game.setYear(1);
+            game.setMessages(new ArrayList<>());
         } else if (game.getYear() == 10) {
+            game.setMessages(new ArrayList<>());
             return game;
+        } else if (game.getYear() == 0) {
+            game.setMessages(new ArrayList<>());
+            game.setMarkets(marketService.startNewGame(game));
+            game.setYear(1);
         } else {
-           game = nextRound(game);
+            //Grab previous years markets
+            List<Market> marketList = new ArrayList<>();
+            for (Market m : game.getMarkets()) {
+                if (m.getYearNumber() == game.getYear()) {
+                    marketList.add(m);
+                }
+            }
+            game.setMarkets(marketList);
+            game = nextRound(game);
+            game.setMessages(new ArrayList<>());
         }
 
         // If previous game but no rounds ran
@@ -65,7 +83,7 @@ public class GameService {
     }
 
     public Result<Game> addGame(Game game){
-        game.setYear(1);
+        game.setYear(0);
         game.setScore(10000);
         Result<Game> result = validate(game);
         if (!result.isSuccess()){
@@ -77,14 +95,41 @@ public class GameService {
     }
 
     public Game nextRound(Game game) {
+        Game tempGame = new Game();
+        tempGame.setMessages(new ArrayList<>());
+        tempGame.setGameId(game.getGameId());
+        tempGame.setYear(game.getYear());
+        tempGame.setScore(game.getScore());
+        tempGame.setMarkets(game.getMarkets());
+        tempGame.setUserId(game.getUserId());
+        game.setMessages(new ArrayList<>());
         int value = 0;
-        if (!validate(game).isSuccess() || !validateNextRound(game)) {
+
+        game = validateNextRound(game);
+        if (game.getMessages().size() > 0) {
+            for (Market m : game.getMarkets()) {
+                m.setStockPurchasedYear(0);
+            }
+            return game;
+        }
+
+        List<String> errorMessages = validate(game).getMessages();
+        if (errorMessages.size() > 0) {
+            for (String error : errorMessages) {
+                game.addMessage(error);
+            }
             return game;
         }
 
         if (game.getYear() >= 9) {
             return finalRound(game);
         }
+
+        if (game.getMarkets().size() != 0 && game.getMarkets().size() != 10) {
+            game.addMessage("Not correct number of markets.");
+            return game;
+        }
+
         for (Market m : game.getMarkets()) {
             if (m.getMarketId() == 0) {
                 value = m.getStockPurchasedYear() * m.getPrice();
@@ -93,25 +138,46 @@ public class GameService {
                 } else {
                     game.setScore(game.getScore() + value);
                 }
+
+                // add dividend
+                if (m.getStockPurchasedYear() + m.getStockPurchasedTotal() > 0) {
+                    value = game.getScore() + (Math.floorDiv((m.getStockPurchasedYear() + m.getStockPurchasedTotal()), 10) * m.getCompany().getDividend());
+                    game.setScore(value);
+                }
+            }
+        }
+        // If you bought too much. return the old prices and remove stocks bought.
+        if (game.getScore() < 0) {
+            tempGame.addMessage("You do not have that much money.");
+            for (Market m : tempGame.getMarkets()) {
+                m.setStockPurchasedYear(0);
+            }
+            return tempGame;
+        }
+
+        for (Market m : game.getMarkets()) {
+            if (m.getMarketId() == 0) {
                 marketService.addMarket(m);
             }
         }
 
         updateGameState(game);
         game.setYear(game.getYear() + 1);
-
-        game.setMarkets(marketService.findByGameId(game.getGameId()));
-
+        // game.setMarkets(marketService.findByGameId(game.getGameId()));
         List<Market> marketList = marketService.generateThisYearMarket(game.getYear(), game.getGameId());
-        List<Market> gameMarketList = game.getMarkets();
-        gameMarketList.addAll(marketList);
-        game.setMarkets(gameMarketList);
+        // List<Market> gameMarketList = game.getMarkets();
+        // gameMarketList.addAll(marketList);
+        game.setMarkets(marketList);
 
         return game;
     }
 
     public Game finalRound(Game game) {
         int value = 0;
+        if (game.getMarkets().size() != 10) {
+            game.addMessage("Not correct number of markets.");
+            return game;
+        }
         for (Market m : game.getMarkets()) {
             if (m.getMarketId() == 0) {
                 m.setStockPurchasedYear(0 - m.getStockPurchasedTotal());
@@ -121,6 +187,12 @@ public class GameService {
                 } else {
                     game.setScore(game.getScore() + value);
                 }
+
+                if (m.getStockPurchasedYear() + m.getStockPurchasedTotal() > 0) {
+                    value = game.getScore() + (Math.floorDiv((m.getStockPurchasedYear() + m.getStockPurchasedTotal()), 10) * m.getCompany().getDividend());
+                    game.setScore(value);
+                }
+
                 marketService.addMarket(m);
             }
         }
@@ -159,6 +231,7 @@ public class GameService {
         resultboolean.setPayload(repository.updateGameState(game));
         return resultboolean;
     }
+
     public boolean deleteGame (String userId){
         Game game = findGameByUserID(userId);
 
@@ -171,30 +244,41 @@ public class GameService {
         return repository.deleteGame(game.getGameId());
     }
 
-    private boolean validateNextRound(Game game) {
+    private Game validateNextRound(Game game) {
         for (Market m : game.getMarkets()) {
             if (m.getYearNumber() == game.getYear() &&
-                ((m.getStockPurchasedTotal() + m.getStockPurchasedYear() > 100 ) || (m.getStockPurchasedTotal() + m.getStockPurchasedYear() < 0 ))) {
-                return false;
+                    ((m.getStockPurchasedTotal() + m.getStockPurchasedYear() > 100 ) || (m.getStockPurchasedTotal() + m.getStockPurchasedYear() < 0 ))) {
+                game.addMessage("There is an error in stocks purchased.");
+                return game;
             }
         }
-        return true;
+        return game;
     }
 
     private Result<Game> validate(Game game){
         Result<Game> result = new Result<>();
+
         if(game == null){
             result.addMessage("game cannot be null", ResultType.INVALID);
             return result;
         }
+
         if (game.getUserId() == null){
             result.addMessage("User Id cannot be less than 0.", ResultType.INVALID);
             return result;
         }
-        if (game.getYear() < 0){
-            result.addMessage("Turn/LastYear cannot be less than 0.", ResultType.INVALID);
+
+        Game gameSQL = repository.findGameByUserID(game.getUserId());
+
+        if (gameSQL == null) {
             return result;
         }
+
+        if (!(game.getYear() - 1 == gameSQL.getYear() || game.getYear() == gameSQL.getYear())){
+            result.addMessage("Turn/Year was changed.", ResultType.INVALID);
+            return result;
+        }
+
         return result;
     }
 }
