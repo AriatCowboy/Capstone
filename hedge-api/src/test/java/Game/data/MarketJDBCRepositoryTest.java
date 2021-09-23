@@ -44,23 +44,23 @@ class MarketJDBCRepositoryTest {
         assertEquals(1, marketList.size());
     }
 
-    @Test
-    void addMarket() {
-
-        Market market = new Market(createCompany(), 25, 1, 3, 1, 10, false, false);
-        repository.addMarket(market);
-        assertEquals(3, repository.findPortfolio(1, 1).size());
-    }
-
-    @Test
-    void setBankrupt() {
-        Market market = new Market(createCompany(), 25, 1, 3, 1, 10, false, true);
-        repository.setBankrupt(market);
-        assertEquals(3, repository.findPortfolio(1, 1).size());
-        assertEquals(1, repository.findByCompanyId(1, 1).size());
-        List<Market> data = repository.findByCompanyId(1, 1);
-        assertTrue(data.get(0).getBankrupt());
-    }
+//    @Test
+//    void addMarket() {
+//
+//        Market market = new Market(createCompany(), 25, 1, 3, 1, 10, false, false);
+//        repository.addMarket(market);
+//        assertEquals(3, repository.findPortfolio(1, 1).size());
+//    }
+//
+//    @Test
+//    void setBankrupt() {
+//        Market market = new Market(createCompany(), 25, 1, 3, 1, 10, false, true);
+//        repository.setBankrupt(market);
+//        assertEquals(3, repository.findPortfolio(1, 1).size());
+//        assertEquals(1, repository.findByCompanyId(1, 1).size());
+//        List<Market> data = repository.findByCompanyId(1, 1);
+//        assertTrue(data.get(0).getBankrupt());
+//    }
 
     @Test
     void deleteMarket() {
