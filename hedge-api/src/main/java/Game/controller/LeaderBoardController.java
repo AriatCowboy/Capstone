@@ -2,6 +2,7 @@ package Game.controller;
 
 import Game.domain.LeaderBoardService;
 import Game.domain.Result;
+import Game.model.AppUser;
 import Game.model.LeaderBoard;
 import Game.utility.JwtConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,20 @@ public class LeaderBoardController {
         return ErrorResponse.build(result);
     }
 
-    @GetMapping("/addscore")
-    public ResponseEntity<Object> addHighScore(String username, int score){
-        Result<Boolean> result = service.addHighScore(username, score);
+    @PostMapping("/addscore")
+    public ResponseEntity<Object> addHighScore(@RequestHeader(value = "Authorization", required = false) String authorizationHeader, @RequestBody int score){
+        AppUser user = null;
+
+        if (authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+            user = jwtConverter.getUserFromToken(token);
+        }
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        Result<Boolean> result = service.addHighScore(user.getUsername(), score);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
         }
