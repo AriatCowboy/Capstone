@@ -52,7 +52,7 @@ public class MarketService {
         List<Market> marketList = new ArrayList<>();
 
         while (marketList.size() != 10) {
-            marketList = addCompanyToMarket(marketList, game.getYear(), game.getGameId());
+            marketList = addCompanyToMarket(marketList, game.getYear() + 1, game.getGameId());
         }
 
         return marketList;

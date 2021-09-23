@@ -6,6 +6,7 @@ import Game.model.Market;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.error.Mark;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,6 +43,7 @@ public class GameService {
 
     public Game startGame(String userId) {
         Game game = findGameByUserID(userId);
+        game.setMessages(new ArrayList<>());
 
         // If new game
         if (game == null) {
@@ -50,10 +52,14 @@ public class GameService {
             Result<Game> gameResult = addGame(game);
             game = gameResult.getPayload();
             game.setMarkets(marketService.startNewGame(game));
+            game.setYear(1);
         } else if (game.getYear() == 10) {
             return game;
+        } else if (game.getYear() == 0) {
+            game.setMarkets(marketService.startNewGame(game));
+            game.setYear(1);
         } else {
-           game = nextRound(game);
+            game = nextRound(game);
         }
 
         // If previous game but no rounds ran
@@ -65,7 +71,7 @@ public class GameService {
     }
 
     public Result<Game> addGame(Game game){
-        game.setYear(1);
+        game.setYear(0);
         game.setScore(10000);
         Result<Game> result = validate(game);
         if (!result.isSuccess()){
@@ -77,16 +83,31 @@ public class GameService {
     }
 
     public Game nextRound(Game game) {
+        game.setMessages(new ArrayList<>());
         int value = 0;
 
-        if (!validate(game).isSuccess() || !validateNextRound(game)) {
+        game = validateNextRound(game);
+        if (game.getMessages().size() > 0) {
             return game;
         }
 
-        if (game.getYear() == 9) {
+        List<String> errorMessages = validate(game).getMessages();
+        if (errorMessages.size() > 0) {
+            for (String error : errorMessages) {
+                game.addMessage(error);
+            }
+            return game;
+        }
+
+        if (game.getYear() >= 9) {
             return finalRound(game);
         }
 
+
+        if (game.getMarkets().size() != 10) {
+            game.addMessage("Not correct number of markets.");
+            return game;
+        }
         for (Market m : game.getMarkets()) {
             if (m.getMarketId() == 0) {
                 value = m.getStockPurchasedYear() * m.getPrice();
@@ -102,12 +123,13 @@ public class GameService {
         updateGameState(game);
         game.setYear(game.getYear() + 1);
 
-        game.setMarkets(marketService.findByGameId(game.getGameId()));
+
+        // game.setMarkets(marketService.findByGameId(game.getGameId()));
 
         List<Market> marketList = marketService.generateThisYearMarket(game.getYear(), game.getGameId());
-        List<Market> gameMarketList = game.getMarkets();
-        gameMarketList.addAll(marketList);
-        game.setMarkets(gameMarketList);
+        // List<Market> gameMarketList = game.getMarkets();
+        // gameMarketList.addAll(marketList);
+        game.setMarkets(marketList);
 
 
         return game;
@@ -115,6 +137,10 @@ public class GameService {
 
     public Game finalRound(Game game) {
         int value = 0;
+        if (game.getMarkets().size() != 10) {
+            game.addMessage("Not correct number of markets.");
+            return game;
+        }
         for (Market m : game.getMarkets()) {
             if (m.getMarketId() == 0) {
                 m.setStockPurchasedYear(0 - m.getStockPurchasedTotal());
@@ -174,30 +200,41 @@ public class GameService {
         return repository.deleteGame(game.getGameId());
     }
 
-    private boolean validateNextRound(Game game) {
+    private Game validateNextRound(Game game) {
         for (Market m : game.getMarkets()) {
             if (m.getYearNumber() == game.getYear() &&
                 ((m.getStockPurchasedTotal() + m.getStockPurchasedYear() > 100 ) || (m.getStockPurchasedTotal() + m.getStockPurchasedYear() < 0 ))) {
-                return false;
+                game.addMessage("There is an error in stocks purchased.");
+                return game;
             }
         }
-        return true;
+        return game;
     }
 
     private Result<Game> validate(Game game){
         Result<Game> result = new Result<>();
+
         if(game == null){
             result.addMessage("game cannot be null", ResultType.INVALID);
             return result;
         }
+
         if (game.getUserId() == null){
             result.addMessage("User Id cannot be less than 0.", ResultType.INVALID);
             return result;
         }
-        if (game.getYear() < 0){
-            result.addMessage("Turn/LastYear cannot be less than 0.", ResultType.INVALID);
+
+        Game gameSQL = repository.findGameByUserID(game.getUserId());
+
+        if (gameSQL == null) {
             return result;
         }
+
+        if (!(game.getYear() - 1 == gameSQL.getYear() || game.getYear() == gameSQL.getYear())){
+            result.addMessage("Turn/Year was changed.", ResultType.INVALID);
+            return result;
+        }
+
         return result;
     }
 }
