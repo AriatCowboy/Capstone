@@ -36,50 +36,49 @@ class GameJDBCRepositoryTest {
     @Test
     void shouldNotFindGameById() {
         Game game1 = repository.findGameById(5);
+        assertNull(game1);
+    }
+
+    @Test
+    void shouldFindByUserId() {
+        Game game1 = repository.findGameByUserID("1");
+
+        assertNotNull(game1);
+        assertEquals(1, game1.getGameId());
+        assertEquals("1", game1.getUserId());
+    }
+
+    @Test
+    void shouldNotFindByUserId() {
+        Game game1 = repository.findGameByUserID("5");
 
         assertNull(game1);
     }
 
-//    @Test
-//    void shouldFindByUserId() {
-//        Game game1 = repository.findGameByUserID(1);
-//
-//        assertNotNull(game1);
-//        assertEquals(1, game1.getGameId());
-//        assertEquals(1, game1.getUserId());
-//    }
-//
-//    @Test
-//    void shouldNotFindByUserId() {
-//        Game game1 = repository.findGameByUserID(5);
-//
-//        assertNull(game1);
-//    }
+    @Test
+    void shouldAddGame() {
+        Game game = makeGame();
+        Game actual = repository.addGame(game);
+        assertNotNull(actual);
+        assertEquals(2, actual.getGameId());
+    }
 
-//    @Test
-//    void shouldAdd() {
-//        Game game = makeGame();
-//        Game actual = repository.addGame(game);
-//        assertNotNull(actual);
-//        assertEquals(2, actual.getGameId());
-//    }
+    @Test
+    void shouldUpdate() {
+        Game game = makeGame();
+        game.setGameId(1);
+        game.setUserId("1");
+        game.setYear(4);
+        assertTrue(repository.updateGameState(game));
+    }
 
-//    @Test
-//    void shouldUpdate() {
-//        Game game = makeGame();
-//        game.setGameId(1);
-//        game.setUserId(1);
-//        game.setLastYear(4);
-//        assertTrue(repository.updateGameState(game));
-//    }
-//
-//    @Test
-//    void shouldNotUpdate() {
-//        Game game = makeGame();
-//        game.setGameId(1);
-//        game.setUserId(5);
-//        assertFalse(repository.updateGameState(game));
-//    }
+    @Test
+    void shouldNotUpdate() {
+        Game game = makeGame();
+        game.setGameId(1);
+        game.setUserId("5");
+        assertFalse(repository.updateGameState(game));
+    }
 
     @Test
     void shouldDelete() {
@@ -87,17 +86,18 @@ class GameJDBCRepositoryTest {
         assertTrue(repository.deleteGame(1));
     }
 
-//    @Test
-//    void shouldNotDelete() {
-//        assertFalse(repository.deleteGame(4));
-//    }
-//
-//    private Game makeGame() {
-//        Game game = new Game();
-//        game.setUserId(3);
-//        game.setLastYear(1);
-//        return game;
-//    }
+    @Test
+    void shouldNotDelete() {
+        assertFalse(repository.deleteGame(4));
+    }
+
+    private Game makeGame() {
+        Game game = new Game();
+        game.setUserId("3");
+        game.setYear(1);
+        game.setScore(21);
+        return game;
+    }
 
 
 }

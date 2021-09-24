@@ -37,17 +37,13 @@ class CompanyJDBCRepositoryTest {
         assertEquals("High", company.getRisk());
         assertEquals("Cultural", company.getCompanyTypeName());
 
-        company = repository.findById(2);
-        assertEquals("Health Harbor", company.getName());
-        assertEquals("High", company.getRisk());
-        assertEquals("Cultural", company.getCompanyTypeName());
-
-        company = repository.findById(3);
-        assertEquals("Leisure Machine", company.getName());
-        assertEquals("Medium", company.getRisk());
-        assertEquals("Cultural", company.getCompanyTypeName());
-
         company = repository.findById(28);
+        assertNull(company);
+    }
+
+    @Test
+    void shouldNotFindById() {
+        Company company = repository.findById(28);
         assertNull(company);
     }
 }

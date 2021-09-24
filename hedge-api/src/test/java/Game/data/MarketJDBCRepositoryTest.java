@@ -27,44 +27,72 @@ class MarketJDBCRepositoryTest {
     }
 
     @Test
-    void findByGameId() {
+    void shouldFindByGameId() {
         List<Market> marketList = repository.findByGameId(1);
         assertEquals(2, marketList.size());
     }
 
     @Test
-    void findPortfolio() {
+    void shouldNotFindByGameId() {
+        List<Market> marketList = repository.findByGameId(5);
+        assertEquals(0, marketList.size());
+    }
+
+    @Test
+    void shouldFindPortfolio() {
         List<Market> marketList = repository.findPortfolio(1, 1);
         assertEquals(2, marketList.size());
     }
 
     @Test
-    void findByCompanyId() {
+    void shouldNotFindPortfolio() {
+        List<Market> marketList = repository.findPortfolio(4, 1);
+        assertEquals(0, marketList.size());
+    }
+
+    @Test
+    void shouldFindByCompanyId() {
         List<Market> marketList = repository.findByCompanyId(1, 1);
         assertEquals(1, marketList.size());
     }
 
-//    @Test
-//    void addMarket() {
-//
-//        Market market = new Market(createCompany(), 25, 1, 3, 1, 10, false, false);
-//        repository.addMarket(market);
-//        assertEquals(3, repository.findPortfolio(1, 1).size());
-//    }
-//
-//    @Test
-//    void setBankrupt() {
-//        Market market = new Market(createCompany(), 25, 1, 3, 1, 10, false, true);
-//        repository.setBankrupt(market);
-//        assertEquals(3, repository.findPortfolio(1, 1).size());
-//        assertEquals(1, repository.findByCompanyId(1, 1).size());
-//        List<Market> data = repository.findByCompanyId(1, 1);
-//        assertTrue(data.get(0).getBankrupt());
-//    }
+    @Test
+    void shouldNotFindByCompanyId() {
+        List<Market> marketList = repository.findByCompanyId(21, 1);
+        assertEquals(0, marketList.size());
+    }
 
     @Test
-    void deleteMarket() {
+    void shouldAddMarket() {
+        Market market = new Market(createCompany(), 25, 1, 3, 1, 1, 1, false, false);
+        assertTrue(repository.addMarket(market));
+        assertEquals(3, repository.findPortfolio(1, 1).size());
+    }
+
+    @Test
+    void shouldSetBankrupt() {
+        Company company = createCompany();
+        company.setCompanyId(1);
+        Market market = new Market(company, 25, 1, 1, 1, 0, 0, false, true);
+        assertTrue(repository.setBankrupt(market));
+        List<Market> data = repository.findByCompanyId(1, 1);
+        assertTrue(data.get(0).getBankrupt());
+    }
+
+    @Test
+    void shouldNotSetBankrupt() {
+        Market market = new Market(createCompany(), 25, 1, 1, 1, 0, 0, false, true);
+        assertFalse(repository.setBankrupt(market));
+    }
+
+    @Test
+    void shouldDeleteMarket() {
         assertTrue(repository.deleteMarket(1));
+    }
+
+    @Test
+    void shouldNotDeleteMarket() {
+        assertFalse(repository.deleteMarket(5));
     }
 
     private Company createCompany() {
