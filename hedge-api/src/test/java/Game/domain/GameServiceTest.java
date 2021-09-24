@@ -2,12 +2,21 @@ package Game.domain;
 
 import Game.data.GameRepository;
 import Game.data.LeaderBoardRepository;
+import Game.model.Company;
 import Game.model.Game;
+import Game.model.Market;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class GameServiceTest {
@@ -15,13 +24,19 @@ class GameServiceTest {
     @Autowired
     GameService service;
 
-    @Autowired
-    GameRepository gameRepository;
+    @MockBean
+    GameRepository repository;
+
+    @MockBean
+    MarketService marketService;
 
     @Test
     void findGameById() {
-       Game game = service.findGameById(1);
-        assertEquals(1, game.getUserId());
+        when(repository.findGameById(1)).thenReturn(createGame());
+        when(marketService.findByGameId(1)).thenReturn(createMarkets());
+
+        Game game = service.findGameById(1);
+        assertEquals("1", game.getUserId());
     }
 
     @Test
@@ -30,69 +45,111 @@ class GameServiceTest {
         assertNull(game);
     }
 
+    @Test
+    void findGameByUserId() {
+        when(repository.findGameByUserID("1")).thenReturn(createGame());
+        when(marketService.findByGameId(1)).thenReturn(createMarkets());
 
-//    @Test
-//    void findGameByUserID() {
-//        Game game = service.findGameByUserID(1);
-//        assertEquals(1, game.getUserId());
-//    }
-//
-//    @Test
-//    void shouldNotFindGameByUserID() {
-//        Game game = service.findGameByUserID(2);
-//        assertNull(game);
-//    }
+        Game game = service.findGameByUserID("1");
+        assertEquals("1", game.getUserId());
+    }
 
-//    @Test
-//    void addGame() {
-//        Game game = new Game(2, 2, 9);
-//        Result<Game> gameResult = service.addGame(game);
-//        assertTrue(gameResult.isSuccess());
-//    }
-//
-//    @Test
-//    void shouldNotAddGame() {
-//        Game game = new Game(0, 2, 0);
-//        Result<Game> gameResult = service.addGame(game);
-//        assertTrue(gameResult.getMessages().size() > 0);
-//
-//        game = new Game(2, 2, 0);
-//        gameResult = service.addGame(game);
-//        assertTrue(gameResult.getMessages().size() > 0);
-//
-//        game = new Game(2, 0, 3);
-//        gameResult = service.addGame(game);
-//        assertTrue(gameResult.getMessages().size() > 0);
-//    }
-//
-//    @Test
-//    void updateGameState() {
-//        Game game = new Game(1, 1, 9);
-//        Result<Boolean> gameResult = service.updateGameState(game);
-//        assertTrue(gameResult.isSuccess());
-//        game = service.findGameById(1);
-//        assertEquals(9, game.getLastYear());
-//    }
+    @Test
+    void shouldStartGame() {
+        when(repository.findGameByUserID("1")).thenReturn(createGame());
+        when(marketService.findByGameId(1)).thenReturn(createMarkets());
+        when(repository.updateGameState(any())).thenReturn(true);
+        Result<Market> result = new Result<>();
+        result.setPayload(createMarket());
+        when(marketService.addMarket(any())).thenReturn(result);
+        when(marketService.generateThisYearMarket(anyInt(), anyInt())).thenReturn(createMarkets());
 
-//    @Test
-//    void shouldNotUpdateGameState() {
-//        Game game = new Game(0, 1, 9);
-//        Result<Boolean> gameResult = service.updateGameState(game);
-//        assertTrue(gameResult.getMessages().size() > 0);
-//
-//        game = new Game(1, 0, 9);
-//        gameResult = service.updateGameState(game);
-//        assertTrue(gameResult.getMessages().size() > 0);
-//
-//        game = new Game(1, 1, 0);
-//        gameResult = service.updateGameState(game);
-//        assertTrue(gameResult.getMessages().size() > 0);
-//    }
+        Game game = service.startGame("1");
+        assertNotNull(game);
+        assertEquals(1, game.getGameId());
+        assertEquals("1", game.getUserId());
+        assertEquals(10, game.getMarkets().size());
+        assertEquals(2, game.getYear());
+        assertEquals(0, game.getMessages().size());
+    }
 
-//    @Test
-//    void deleteGame() {
-//        boolean result = service.deleteGame(1);
-//        Game game = service.findGameById(1);
-//        assertEquals(false, game);
-//    }
+    @Test
+    void shouldStartNewGame() {
+        when(repository.findGameByUserID("1")).thenReturn(null);
+        when(repository.addGame(any())).thenReturn(createGame());
+        when(marketService.startNewGame(any())).thenReturn(createMarkets());
+        Game game = service.startGame("1");
+        assertNotNull(game);
+        assertEquals(1, game.getGameId());
+        assertEquals("1", game.getUserId());
+        assertEquals(10, game.getMarkets().size());
+        assertEquals(1, game.getYear());
+        assertEquals(0, game.getMessages().size());
+    }
+
+    @Test
+    void shouldFinish() {
+        Result<Market> result = new Result<>();
+        result.setPayload(createMarket());
+        when(marketService.addMarket(any())).thenReturn(result);
+        when(repository.updateGameState(any())).thenReturn(true);
+        when(marketService.findByGameId(anyInt())).thenReturn(createMarkets());
+
+        Game game = createGame();
+        game.setMarkets(createMarkets());
+        game = service.finalRound(game);
+
+        assertNotNull(game);
+        assertEquals(1, game.getGameId());
+        assertEquals("1", game.getUserId());
+        assertEquals(10, game.getMarkets().size());
+        assertEquals(2, game.getYear());
+        assertEquals(0, game.getMessages().size());
+    }
+
+    @Test
+    void shouldDeleteGame() {
+        when(marketService.deleteMarket(1)).thenReturn(true);
+        when(repository.deleteGame(1)).thenReturn(true);
+        when(repository.findGameByUserID("1")).thenReturn(createGame());
+        assertTrue(service.deleteGame("1"));
+    }
+
+    Game createGame() {
+        List<Market> marketList = new ArrayList<>();
+        marketList.add(createMarket());
+        Game game = new Game(1, "1", 1, 1, marketList);
+        return game;
+    }
+
+    List<Market> createMarkets() {
+        List<Market> marketList = new ArrayList<>();
+        marketList.add(createMarket());
+        marketList.add(createMarket());
+        marketList.add(createMarket());
+        marketList.add(createMarket());
+        marketList.add(createMarket());
+        marketList.add(createMarket());
+        marketList.add(createMarket());
+        marketList.add(createMarket());
+        marketList.add(createMarket());
+        marketList.add(createMarket());
+        return marketList;
+    }
+
+    Market createMarket() {
+        Market market = new Market();
+        market.setMarketId(1);
+        market.setYearNumber(1);
+        market.setCompany(createCompany());
+        return market;
+    }
+
+    Company createCompany() {
+        Company company = new Company();
+        company.setCompanyId(1);
+        company.setName("blah");
+        return company;
+    }
 }
+
